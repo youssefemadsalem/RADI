@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-white text-black flex items-center justify-center px-6 font-sans">
+  <div class="w-full max-w-sm">
+    <div class="mb-12 text-center">
+      <h2 class="text-xs uppercase tracking-[0.4em] text-neutral-400 font-medium mb-2">
+        Studio Identity Access
+      </h2>
+      <h1 class="font-serif text-3xl tracking-[0.2em] font-light uppercase">RADI</h1>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #authForm="ngForm" class="space-y-6">
+      @if (errorMessage()) {
+        <div
+          class="text-xs tracking-wider bg-neutral-100 text-black border border-black/10 p-3 text-center uppercase"
+        >
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="flex flex-col border-b border-black py-2">
+        <label class="text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold mb-1"
+          >Email Coordinates</label
+        >
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          placeholder="name@domain.com"
+          class="bg-transparent border-none text-sm tracking-wide focus:outline-none placeholder-neutral-300 py-1"
+        />
+      </div>
+
+      <div class="flex flex-col border-b border-black py-2">
+        <label class="text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-semibold mb-1"
+          >Security Key</label
+        >
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          placeholder="••••••••"
+          class="bg-transparent border-none text-sm tracking-widest focus:outline-none placeholder-neutral-300 py-1"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="!authForm.form.valid"
+        class="w-full bg-black text-white py-3.5 text-xs font-semibold uppercase tracking-[0.3em] hover:bg-neutral-900 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        {{ isLoginMode() ? 'Enter Space' : 'Create Profile' }}
+      </button>
+    </form>
+
+    <div
+      class="mt-8 flex flex-col items-center space-y-3 text-[11px] uppercase tracking-widest text-neutral-500"
+    >
+      <button type="button" (click)="toggleMode()" class="hover:text-black transition-colors">
+        {{
+          isLoginMode()
+            ? 'No profile? Generate one here'
+            : 'Already have authentication coordinates? Login'
+        }}
+      </button>
+
+      @if (isLoginMode()) {
+        <button
+          type="button"
+          class="text-neutral-300 hover:text-black text-[10px] transition-colors mt-2"
+        >
+          Forgot Authentication Key?
+        </button>
+      }
+    </div>
+  </div>
+</div>
