@@ -1,5 +1,5 @@
 <div 
-  class="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-[100] transition-all duration-500"
+  class="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-100 transition-all duration-500"
   [class.opacity-100]="cartService.isOpen()"
   [class.pointer-events-auto]="cartService.isOpen()"
   [class.visible]="cartService.isOpen()"
@@ -10,7 +10,7 @@
 ></div>
 
 <aside 
-  class="fixed top-0 right-0 h-screen w-full sm:w-[480px] bg-white z-[101] flex flex-col shadow-2xl transition-transform duration-500"
+  class="fixed top-0 right-0 h-screen w-full sm:w-120 bg-white z-101 flex flex-col shadow-2xl transition-transform duration-500"
   [class.translate-x-0]="cartService.isOpen()"
   [class.translate-x-full]="!cartService.isOpen()"
 >
@@ -26,7 +26,7 @@
     </button>
   </header>
 
-  <div class="flex-grow overflow-y-auto px-8 py-4 divide-y divide-neutral-100 selection:bg-black selection:text-white">
+  <div class="grow overflow-y-auto px-8 py-4 divide-y divide-neutral-100 selection:bg-black selection:text-white">
     @if (cartService.items().length === 0) {
       <div class="h-full flex flex-col items-center justify-center text-center space-y-3">
         <p class="text-[11px] uppercase tracking-widest text-neutral-400">Your bag is completely empty</p>
@@ -36,11 +36,11 @@
       @for (item of cartService.items(); track item._id) {
         <div class="flex py-6 first:pt-2 group">
           
-          <div class="w-20 aspect-[3/4] bg-neutral-50 overflow-hidden border border-neutral-100 flex-shrink-0 relative">
+          <div class="w-20 aspect-3/4 bg-neutral-50 overflow-hidden border border-neutral-100 shrink-0 relative">
             <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
           </div>
 
-          <div class="flex-grow pl-6 flex flex-col justify-between">
+          <div class="grow pl-6 flex flex-col justify-between">
             <div class="space-y-1">
               <div class="flex justify-between items-start">
                 <h3 class="font-sans text-[11px] uppercase tracking-wider font-semibold text-neutral-900 leading-tight pr-4">
@@ -51,7 +51,7 @@
                   (click)="cartService.removeItem(item._id)" 
                   class="text-neutral-400 hover:text-red-700 transition-colors flex items-center"
                 >
-                  <svg [lucideIcon]="X" class="w-3.5 h-3.5 stroke-[2]"></svg>
+                  <svg [lucideIcon]="X" class="w-3.5 h-3.5 stroke-2"></svg>
                 </button>
               </div>
               <p class="text-[10px] uppercase text-neutral-400 font-mono tracking-widest">
@@ -66,15 +66,15 @@
                   (click)="cartService.updateQuantity(item._id, -1)" 
                   class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-r border-neutral-200"
                 >
-                  <svg [lucideIcon]="Minus" class="w-3 h-3 stroke-[2]"></svg>
+                  <svg [lucideIcon]="Minus" class="w-3 h-3 stroke-2"></svg>
                 </button>
-                <span class="px-3 text-xs font-medium text-black min-w-[24px] text-center select-none">{{ item.quantity }}</span>
+                <span class="px-3 text-xs font-medium text-black min-w-6 text-center select-none">{{ item.quantity }}</span>
                 <button 
                   type="button" 
                   (click)="cartService.updateQuantity(item._id, 1)" 
                   class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-l border-neutral-200"
                 >
-                  <svg [lucideIcon]="Plus" class="w-3 h-3 stroke-[2]"></svg>
+                  <svg [lucideIcon]="Plus" class="w-3 h-3 stroke-2"></svg>
                 </button>
               </div>
               <span class="font-mono text-xs text-neutral-800">${{ (item.price * item.quantity).toFixed(2) }}</span>

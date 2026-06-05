@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-[#fafafa] text-black font-sans selection:bg-black selection:text-white flex flex-col">
   <nav class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-900 z-50 h-20 transition-all duration-300">
-    <div class="max-w-[1600px] h-full mx-auto px-6 md:px-12 flex items-center justify-between">
+    <div class="max-w-400 h-full mx-auto px-6 md:px-12 flex items-center justify-between">
       
       <div class="hidden md:flex items-center space-x-8 text-[10px] uppercase tracking-[0.25em] font-medium text-neutral-400">
         <a href="#" class="text-white transition-colors duration-200">New Arrivals</a>
@@ -45,7 +45,7 @@
     </div>
   </nav>
 
-  <main class="flex-grow pt-32 pb-24 max-w-[1600px] w-full mx-auto px-6 md:px-12 space-y-20">
+  <main class="grow pt-32 pb-24 max-w-400 w-full mx-auto px-6 md:px-12 space-y-20">
     <header class="border-b border-neutral-200 pb-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between">
         <div>
@@ -79,7 +79,7 @@
         @for (product of newArrivals(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
+              <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
@@ -134,7 +134,7 @@
         @for (product of bestSellers(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
+              <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
@@ -189,7 +189,7 @@
         @for (product of clothesCollection(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
+              <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
