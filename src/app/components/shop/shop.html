@@ -31,18 +31,18 @@
         <a href="#" class="hidden sm:inline-block hover:text-white transition-colors duration-300"
           >Search</a
         >
+<button
+  type="button"
+  class="hover:text-white transition-colors duration-300 relative flex items-center group/bag"
+>
+  <svg [lucideIcon]="shoppingBag" class="w-5 h-5 text-neutral-400 group-hover/bag:text-white transition-colors"></svg>
 
-        <button
-          type="button"
-          class="hover:text-white transition-colors duration-300 relative flex items-center space-x-1.5 group/bag"
-        >
-         <lucide-icon name="shopping-bag"></lucide-icon>
-          <span
-            class="bg-black text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold group-hover/bag:bg-neutral-800 transition-colors"
-          >
-            {{ cartCount() }}
-          </span>
-        </button>
+  <span
+    class="absolute -top-2 -right-2 bg-black text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold group-hover/bag:bg-neutral-800 transition-colors"
+  >
+    {{ cartCount() }}
+  </span>
+</button>
 
         <button
           type="button"

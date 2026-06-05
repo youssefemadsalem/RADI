@@ -4,19 +4,20 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/service/auth';
 import { ProductService } from '../../core/service/product';
 import { register } from 'swiper/element/bundle';
-import { ShoppingBag } from 'lucide';
+import { LucideDynamicIcon, LucideShoppingBag } from '@lucide/angular';
 
 register();
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,LucideDynamicIcon],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './shop.html',
   styleUrl: './shop.css',
 })
 export class Shop implements OnInit {
+   readonly shoppingBag = LucideShoppingBag; 
   private authService = inject(AuthService);
   private productService = inject(ProductService);
   private router = inject(Router);
@@ -77,10 +78,4 @@ export class Shop implements OnInit {
     this.authService.logout();
     this.router.navigate(['/auth']);
   }
-
-
-
-  provideLucideIcons({
-  ShoppingBag
-});
 }
