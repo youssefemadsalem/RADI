@@ -1,44 +1,38 @@
 <div class="min-h-screen bg-[#fafafa] text-black font-sans selection:bg-black selection:text-white flex flex-col">
-  <nav class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-100 z-50 h-20 transition-all duration-300">
+  <nav class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-900 z-50 h-20 transition-all duration-300">
     <div class="max-w-[1600px] h-full mx-auto px-6 md:px-12 flex items-center justify-between">
       
-      <!-- Navigation Links -->
       <div class="hidden md:flex items-center space-x-8 text-[10px] uppercase tracking-[0.25em] font-medium text-neutral-400">
         <a href="#" class="text-white transition-colors duration-200">New Arrivals</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Collections</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Editorial</a>
       </div>
 
-      <!-- Center Branding Logo -->
       <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-full flex items-center justify-center">
         <a href="/shop" class="flex items-center justify-center h-10 md:h-12 select-none">
           <img src="../5.png" alt="RADI Logo" class="h-full w-auto object-contain transition-transform duration-300 hover:scale-102" />
         </a>
       </div>
 
-      <!-- Right Utility Controls -->
       <div class="flex items-center space-x-6 text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-400">
         <a href="#" class="hidden sm:inline-block hover:text-white transition-colors duration-300">Search</a>
 
-        <!-- Shopping Bag Action Button Trigger -->
-<button
-  type="button"
-  (click)="cartService.openCart()"
-  class="relative flex items-center p-2 text-neutral-400 hover:text-white transition-colors duration-300 group/bag"
->
-  
-  <svg 
-    [lucideIcon]="shoppingBag" 
-    class="w-5 h-5 text-neutral-400 group-hover/bag:text-white group-hover/bag:scale-105 transition-all duration-300 stroke-[1.5]"
-  ></svg>
+        <button
+          type="button"
+          (click)="cartService.openCart()"
+          class="relative flex items-center p-2 text-neutral-400 hover:text-white transition-colors duration-300 group/bag"
+        >
+          <svg 
+            [lucideIcon]="shoppingBag" 
+            class="w-5 h-5 text-neutral-400 group-hover/bag:text-white group-hover/bag:scale-105 transition-all duration-300 stroke-[1.5]"
+          ></svg>
 
-  @if (cartCount() > 0) {
-    <span class="absolute -top-1 -right-1 bg-white text-black text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold shadow-sm transition-all duration-300 group-hover/bag:bg-neutral-200 group-hover/bag:scale-110">
-      {{ cartCount() }}
-    </span>
-  }
-  
-</button>
+          @if (cartCount() > 0) {
+            <span class="absolute -top-1 -right-1 bg-white text-black text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold shadow-sm transition-all duration-300 group-hover/bag:bg-neutral-200 group-hover/bag:scale-110">
+              {{ cartCount() }}
+            </span>
+          }
+        </button>
 
         <button
           type="button"
@@ -62,11 +56,8 @@
             Essential Forms
           </h3>
         </div>
-        <p
-          class="text-xs text-neutral-400 tracking-wide max-w-xs lowercase mt-4 md:mt-0 leading-relaxed"
-        >
-          A careful curation of structural items defined by geometric balance and absolute
-          functionality.
+        <p class="text-xs text-neutral-400 tracking-wide max-w-xs lowercase mt-4 md:mt-0 leading-relaxed">
+          A careful curation of structural items defined by geometric balance and absolute functionality.
         </p>
       </div>
     </header>
@@ -88,9 +79,7 @@
         @for (product of newArrivals(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div
-                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
-              >
+              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
@@ -98,19 +87,16 @@
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                   />
                 } @else {
-                  <div
-                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
-                  >
+                  <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400">
                     [ Visual Img Placeholder ]
                   </div>
                 }
 
                 <div
-                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                  (click)="addToCart(product); $event.stopPropagation()"
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center z-10 select-none"
                 >
-                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
-                    >+ Add to Bag</span
-                  >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white">+ Add to Bag</span>
                 </div>
               </div>
 
@@ -148,9 +134,7 @@
         @for (product of bestSellers(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div
-                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
-              >
+              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
@@ -158,19 +142,16 @@
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                   />
                 } @else {
-                  <div
-                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
-                  >
+                  <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400">
                     [ Visual Img Placeholder ]
                   </div>
                 }
 
                 <div
-                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                  (click)="addToCart(product); $event.stopPropagation()"
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center z-10 select-none"
                 >
-                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
-                    >+ Add to Bag</span
-                  >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white">+ Add to Bag</span>
                 </div>
               </div>
 
@@ -208,9 +189,7 @@
         @for (product of clothesCollection(); track product._id) {
           <swiper-slide>
             <div class="group/card cursor-pointer flex flex-col">
-              <div
-                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
-              >
+              <div class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                 @if (product.images && product.images.length > 0) {
                   <img
                     [src]="product.images[0]"
@@ -218,19 +197,16 @@
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                   />
                 } @else {
-                  <div
-                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
-                  >
+                  <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400">
                     [ Visual Img Placeholder ]
                   </div>
                 }
 
                 <div
-                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                  (click)="addToCart(product); $event.stopPropagation()"
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center z-10 select-none"
                 >
-                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
-                    >+ Add to Bag</span
-                  >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white">+ Add to Bag</span>
                 </div>
               </div>
 
@@ -250,10 +226,9 @@
         }
       </swiper-container>
     </section>
-  </main> <!-- Main Grid rows remain exactly unchanged -->
-
+  </main>
 
   @if (cartService.isInitialized()) {
-  <app-cart-drawer></app-cart-drawer>
-}
+    <app-cart-drawer></app-cart-drawer>
+  }
 </div>

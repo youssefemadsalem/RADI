@@ -5,16 +5,14 @@ import { AuthService } from '../../core/service/auth';
 import { ProductService } from '../../core/service/product';
 import { register } from 'swiper/element/bundle';
 import { LucideDynamicIcon, LucideShoppingBag } from '@lucide/angular';
-// 1. Import your Cart service and the CartDrawer component
 import { Cart } from '../../core/service/cart'; 
-import { CartDrawer } from '../cart-drawer/cart-drawer'; // Adjust this path to your folder setup
+import { CartDrawer } from '../cart-drawer/cart-drawer'; 
 
 register();
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  // 2. Add CartDrawer to your template imports
   imports: [CommonModule, LucideDynamicIcon, CartDrawer], 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './shop.html',
@@ -23,7 +21,6 @@ register();
 export class Shop implements OnInit {
   readonly shoppingBag = LucideShoppingBag; 
   
-  // 3. Inject the Cart service publicly
   public cartService = inject(Cart);
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -33,7 +30,6 @@ export class Shop implements OnInit {
   bestSellers = signal<any[]>([]);
   clothesCollection = signal<any[]>([]);
   
-  // 4. Link cartCount directly to your service's computed signal value
   cartCount = this.cartService.cartCount;
 
   ngOnInit(): void {
@@ -55,6 +51,29 @@ export class Shop implements OnInit {
       next: (data) => { this.clothesCollection.set(data); this.triggerSwiperUpdate(); },
       error: (err) => console.error('Failed fetching clothes archive:', err),
     });
+  }
+
+  addToCart(product: any): void {
+    const selectedColor = product.colors?.[0] || '#171717';
+    const selectedSize = product.sizes?.[0] || 'OS';
+
+    const itemToSubmit = {
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images?.[0] || '', 
+      selectedSize: selectedSize,
+      selectedColor: selectedColor,
+      quantity: 1
+    };
+
+    if (typeof this.cartService.addItem === 'function') {
+      this.cartService.addItem(itemToSubmit);
+    } else {
+      this.cartService.items.update(items => [...items, itemToSubmit]);
+    }
+
+    this.cartService.openCart();
   }
 
   private triggerSwiperUpdate(): void {
