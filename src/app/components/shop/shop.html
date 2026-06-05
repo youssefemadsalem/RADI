@@ -1,47 +1,43 @@
-<div
-  class="min-h-screen bg-[#fafafa] text-black font-sans selection:bg-black selection:text-white flex flex-col"
->
-  <nav
-    class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-100 z-50 h-20 transition-all duration-300"
-  >
+<div class="min-h-screen bg-[#fafafa] text-black font-sans selection:bg-black selection:text-white flex flex-col">
+  <nav class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-100 z-50 h-20 transition-all duration-300">
     <div class="max-w-[1600px] h-full mx-auto px-6 md:px-12 flex items-center justify-between">
-      <div
-        class="hidden md:flex items-center space-x-8 text-[10px] uppercase tracking-[0.25em] font-medium text-neutral-400"
-      >
+      
+      <!-- Navigation Links -->
+      <div class="hidden md:flex items-center space-x-8 text-[10px] uppercase tracking-[0.25em] font-medium text-neutral-400">
         <a href="#" class="text-white transition-colors duration-200">New Arrivals</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Collections</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Editorial</a>
       </div>
 
-      <div
-        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-full flex items-center justify-center"
-      >
+      <!-- Center Branding Logo -->
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-full flex items-center justify-center">
         <a href="/shop" class="flex items-center justify-center h-10 md:h-12 select-none">
-          <img
-            src="../5.png"
-            alt="RADI Logo"
-            class="h-full w-auto object-contain transition-transform duration-300 hover:scale-102"
-          />
+          <img src="../5.png" alt="RADI Logo" class="h-full w-auto object-contain transition-transform duration-300 hover:scale-102" />
         </a>
       </div>
 
-      <div
-        class="flex items-center space-x-6 text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-400"
-      >
-        <a href="#" class="hidden sm:inline-block hover:text-white transition-colors duration-300"
-          >Search</a
-        >
+      <!-- Right Utility Controls -->
+      <div class="flex items-center space-x-6 text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-400">
+        <a href="#" class="hidden sm:inline-block hover:text-white transition-colors duration-300">Search</a>
+
+        <!-- Shopping Bag Action Button Trigger -->
 <button
   type="button"
-  class="hover:text-white transition-colors duration-300 relative flex items-center group/bag"
+  (click)="cartService.openCart()"
+  class="relative flex items-center p-2 text-neutral-400 hover:text-white transition-colors duration-300 group/bag"
 >
-  <svg [lucideIcon]="shoppingBag" class="w-5 h-5 text-neutral-400 group-hover/bag:text-white transition-colors"></svg>
+  
+  <svg 
+    [lucideIcon]="shoppingBag" 
+    class="w-5 h-5 text-neutral-400 group-hover/bag:text-white group-hover/bag:scale-105 transition-all duration-300 stroke-[1.5]"
+  ></svg>
 
-  <span
-    class="absolute -top-2 -right-2 bg-black text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold group-hover/bag:bg-neutral-800 transition-colors"
-  >
-    {{ cartCount() }}
-  </span>
+  @if (cartCount() > 0) {
+    <span class="absolute -top-1 -right-1 bg-white text-black text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold shadow-sm transition-all duration-300 group-hover/bag:bg-neutral-200 group-hover/bag:scale-110">
+      {{ cartCount() }}
+    </span>
+  }
+  
 </button>
 
         <button
@@ -254,5 +250,10 @@
         }
       </swiper-container>
     </section>
-  </main>
+  </main> <!-- Main Grid rows remain exactly unchanged -->
+
+
+  @if (cartService.isInitialized()) {
+  <app-cart-drawer></app-cart-drawer>
+}
 </div>
