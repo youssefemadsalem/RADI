@@ -1,0 +1,25 @@
+/* Clean typographic smooth rendering rules */
+.font-sans {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Force hardware accelerated graphic transforms on cards */
+.group img,
+.group div {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+swiper-slide {
+  height: auto; /* Normalizes card height profiles evenly across rows */
+}
+
+.group\/card img {
+  will-change: transform;
+  backface-visibility: hidden;
+}

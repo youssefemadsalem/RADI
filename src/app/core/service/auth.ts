@@ -9,7 +9,6 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
-
   private apiUrl = 'http://localhost:5000/api/auth';
 
   currentUser = signal<{ email: string; role: string } | null>(null);
@@ -20,7 +19,6 @@ export class AuthService {
       const savedToken = localStorage.getItem('radi_token');
       const savedRole = localStorage.getItem('radi_role');
       const savedEmail = localStorage.getItem('radi_email');
-
       if (savedToken && savedRole && savedEmail) {
         this.currentUser.set({ email: savedEmail, role: savedRole });
         this.isAuthenticated.set(true);
@@ -36,17 +34,22 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
         if (isPlatformBrowser(this.platformId)) {
-          // Store token credentials cleanly inside user local space
           localStorage.setItem('radi_token', response.token);
           localStorage.setItem('radi_role', response.user.role);
           localStorage.setItem('radi_email', response.user.email);
-
-          // Hydrate the signal values
           this.currentUser.set(response.user);
           this.isAuthenticated.set(true);
         }
       }),
     );
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, payload);
   }
 
   logout(): void {

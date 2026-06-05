@@ -1,12 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService } from '../../core/service/auth';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/service/auth';
+
+// Custom type structure definition for controlling active form views
+type AuthViewState = 'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD';
 
 @Component({
   selector: 'app-auth',
-  imports: [FormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
 })
@@ -14,45 +18,76 @@ export class Auth {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Layout View Toggles
-  isLoginMode = signal<boolean>(true);
-  errorMessage = signal<string | null>(null);
+  // Layout Engine States Tracker
+  currentView = signal<AuthViewState>('LOGIN');
+  feedbackMessage = signal<{ text: string; isSuccess: boolean } | null>(null);
 
-  // Form Field Bindings
+  // Form Fields State Models
   email = '';
   password = '';
+  otpCode = '';
+  newPassword = '';
 
-  toggleMode() {
-    this.isLoginMode.update((val) => !val);
-    this.errorMessage.set(null);
+  switchView(target: AuthViewState) {
+    this.currentView.set(target);
+    this.feedbackMessage.set(null);
   }
 
-  onSubmit() {
-    this.errorMessage.set(null);
-    const payload = { email: this.email, password: this.password };
+  triggerAuthAction() {
+    this.feedbackMessage.set(null);
 
-    if (this.isLoginMode()) {
-      // Execute Login Process
-      this.authService.login(payload).subscribe({
-        next: (res) => {
-          if (res.user.role === 'admin') {
-            this.router.navigate(['/admin']);
-          } else {
-            this.router.navigate(['/shop']);
-          }
-        },
-        error: (err) => this.errorMessage.set(err.error?.message || 'Login credentials rejected.'),
-      });
-    } else {
-      // Execute Registration Process
-      this.authService.register(payload).subscribe({
-        next: () => {
-          this.isLoginMode.set(true); // Flip cleanly to sign in screen
-          alert('Registration successful! Please login.');
-        },
-        error: (err) =>
-          this.errorMessage.set(err.error?.message || 'Registration structural block error.'),
-      });
+    switch (this.currentView()) {
+      case 'LOGIN':
+        this.authService.login({ email: this.email, password: this.password }).subscribe({
+          next: (res) => {
+            if (res.user.role === 'admin') this.router.navigate(['/admin']);
+            else this.router.navigate(['/shop']);
+          },
+          error: (err) => this.setToast(err.error?.message || 'Access denied. Check inputs.'),
+        });
+        break;
+
+      case 'REGISTER':
+        this.authService.register({ email: this.email, password: this.password }).subscribe({
+          next: () => {
+            this.setToast('Profile generated cleanly! Access open.', true);
+            this.switchView('LOGIN');
+          },
+          error: (err) => this.setToast(err.error?.message || 'Profile formation broken.'),
+        });
+        break;
+
+      case 'FORGOT_PASSWORD':
+        this.authService.forgotPassword(this.email).subscribe({
+          next: (res) => {
+            this.setToast(res.message || 'OTP transmitted to mail.', true);
+            this.switchView('RESET_PASSWORD'); // Pass straight to verify field form step
+          },
+          error: (err) => this.setToast(err.error?.message || 'Request transmission failure.'),
+        });
+        break;
+
+      case 'RESET_PASSWORD':
+        const resetPayload = {
+          email: this.email,
+          otp: this.otpCode,
+          newPassword: this.newPassword,
+        };
+        this.authService.resetPassword(resetPayload).subscribe({
+          next: (res) => {
+            this.setToast(res.message || 'Identity altered safely.', true);
+            this.switchView('LOGIN');
+            // Clean fields
+            this.otpCode = '';
+            this.newPassword = '';
+          },
+          error: (err) => this.setToast(err.error?.message || 'Security override failed.'),
+        });
+        break;
     }
+  }
+
+  private setToast(msg: string, success: boolean = false) {
+    this.feedbackMessage.set({ text: msg, isSuccess: success });
   }
 }

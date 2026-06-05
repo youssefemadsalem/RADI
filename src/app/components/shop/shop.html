@@ -1,1 +1,258 @@
-<p>shop works!</p>
+<div
+  class="min-h-screen bg-[#fafafa] text-black font-sans selection:bg-black selection:text-white flex flex-col"
+>
+  <nav
+    class="fixed top-0 left-0 w-full bg-black backdrop-blur-md border-b border-neutral-100 z-50 h-20 transition-all duration-300"
+  >
+    <div class="max-w-[1600px] h-full mx-auto px-6 md:px-12 flex items-center justify-between">
+      <div
+        class="hidden md:flex items-center space-x-8 text-[10px] uppercase tracking-[0.25em] font-medium text-neutral-400"
+      >
+        <a href="#" class="text-white transition-colors duration-200">New Arrivals</a>
+        <a href="#" class="hover:text-white transition-colors duration-200">Collections</a>
+        <a href="#" class="hover:text-white transition-colors duration-200">Editorial</a>
+      </div>
+
+      <div
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-full flex items-center justify-center"
+      >
+        <a href="/shop" class="flex items-center justify-center h-10 md:h-12 select-none">
+          <img
+            src="../5.png"
+            alt="RADI Logo"
+            class="h-full w-auto object-contain transition-transform duration-300 hover:scale-102"
+          />
+        </a>
+      </div>
+
+      <div
+        class="flex items-center space-x-6 text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-400"
+      >
+        <a href="#" class="hidden sm:inline-block hover:text-white transition-colors duration-300"
+          >Search</a
+        >
+
+        <button
+          type="button"
+          class="hover:text-white transition-colors duration-300 relative flex items-center space-x-1.5 group/bag"
+        >
+         <lucide-icon name="shopping-bag"></lucide-icon>
+          <span
+            class="bg-black text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold group-hover/bag:bg-neutral-800 transition-colors"
+          >
+            {{ cartCount() }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          (click)="handleUserLogout()"
+          class="text-neutral-400 hover:text-red-700 font-semibold transition-colors duration-300"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow pt-32 pb-24 max-w-[1600px] w-full mx-auto px-6 md:px-12 space-y-20">
+    <header class="border-b border-neutral-200 pb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between">
+        <div>
+          <h2 class="text-[9px] uppercase tracking-[0.4em] text-neutral-400 font-bold mb-2">
+            Catalogue ARCHIVE
+          </h2>
+          <h3 class="font-serif text-4xl md:text-5xl font-light uppercase tracking-wide">
+            Essential Forms
+          </h3>
+        </div>
+        <p
+          class="text-xs text-neutral-400 tracking-wide max-w-xs lowercase mt-4 md:mt-0 leading-relaxed"
+        >
+          A careful curation of structural items defined by geometric balance and absolute
+          functionality.
+        </p>
+      </div>
+    </header>
+
+    <section class="space-y-6">
+      <div class="flex justify-between items-baseline">
+        <h4 class="text-[11px] uppercase tracking-[0.3em] font-bold text-neutral-800">
+          01 / New Arrivals
+        </h4>
+        <span class="text-[9px] tracking-widest text-neutral-300 font-mono">Drag or Swipe →</span>
+      </div>
+
+      <swiper-container
+        slides-per-view="1"
+        space-between="16"
+        free-mode="true"
+        breakpoints='{"640": {"slidesPerView": 2, "spaceBetween": 20}, "1024": {"slidesPerView": 3, "spaceBetween": 24}, "1280": {"slidesPerView": 4, "spaceBetween": 24}}'
+      >
+        @for (product of newArrivals(); track product._id) {
+          <swiper-slide>
+            <div class="group/card cursor-pointer flex flex-col">
+              <div
+                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
+              >
+                @if (product.images && product.images.length > 0) {
+                  <img
+                    [src]="product.images[0]"
+                    [alt]="product.name"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
+                  />
+                } @else {
+                  <div
+                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
+                  >
+                    [ Visual Img Placeholder ]
+                  </div>
+                }
+
+                <div
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
+                    >+ Add to Bag</span
+                  >
+                </div>
+              </div>
+
+              <div class="flex justify-between items-start text-xs tracking-wide px-1">
+                <div>
+                  <h5 class="font-medium text-neutral-800 uppercase text-[11px] tracking-wider">
+                    {{ product.name }}
+                  </h5>
+                  <p class="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">
+                    {{ product.materials?.[0] || 'Fabric Form' }}
+                  </p>
+                </div>
+                <span class="font-mono text-neutral-600">${{ product.price }}</span>
+              </div>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </section>
+
+    <section class="space-y-6">
+      <div class="flex justify-between items-baseline">
+        <h4 class="text-[11px] uppercase tracking-[0.3em] font-bold text-neutral-800">
+          02 / Best Sellers
+        </h4>
+        <span class="text-[9px] tracking-widest text-neutral-300 font-mono">Drag or Swipe →</span>
+      </div>
+
+      <swiper-container
+        slides-per-view="1"
+        space-between="16"
+        free-mode="true"
+        breakpoints='{"640": {"slidesPerView": 2, "spaceBetween": 20}, "1024": {"slidesPerView": 3, "spaceBetween": 24}, "1280": {"slidesPerView": 4, "spaceBetween": 24}}'
+      >
+        @for (product of bestSellers(); track product._id) {
+          <swiper-slide>
+            <div class="group/card cursor-pointer flex flex-col">
+              <div
+                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
+              >
+                @if (product.images && product.images.length > 0) {
+                  <img
+                    [src]="product.images[0]"
+                    [alt]="product.name"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
+                  />
+                } @else {
+                  <div
+                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
+                  >
+                    [ Visual Img Placeholder ]
+                  </div>
+                }
+
+                <div
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
+                    >+ Add to Bag</span
+                  >
+                </div>
+              </div>
+
+              <div class="flex justify-between items-start text-xs tracking-wide px-1">
+                <div>
+                  <h5 class="font-medium text-neutral-800 uppercase text-[11px] tracking-wider">
+                    {{ product.name }}
+                  </h5>
+                  <p class="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">
+                    {{ product.materials?.[0] || 'Fabric Form' }}
+                  </p>
+                </div>
+                <span class="font-mono text-neutral-600">${{ product.price }}</span>
+              </div>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </section>
+
+    <section class="space-y-6">
+      <div class="flex justify-between items-baseline">
+        <h4 class="text-[11px] uppercase tracking-[0.3em] font-bold text-neutral-800">
+          03 / Apparel & Outerwear
+        </h4>
+        <span class="text-[9px] tracking-widest text-neutral-300 font-mono">Drag or Swipe →</span>
+      </div>
+
+      <swiper-container
+        slides-per-view="1"
+        space-between="16"
+        free-mode="true"
+        breakpoints='{"640": {"slidesPerView": 2, "spaceBetween": 20}, "1024": {"slidesPerView": 3, "spaceBetween": 24}, "1280": {"slidesPerView": 4, "spaceBetween": 24}}'
+      >
+        @for (product of clothesCollection(); track product._id) {
+          <swiper-slide>
+            <div class="group/card cursor-pointer flex flex-col">
+              <div
+                class="bg-neutral-100 overflow-hidden aspect-[3/4] relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50"
+              >
+                @if (product.images && product.images.length > 0) {
+                  <img
+                    [src]="product.images[0]"
+                    [alt]="product.name"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
+                  />
+                } @else {
+                  <div
+                    class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400"
+                  >
+                    [ Visual Img Placeholder ]
+                  </div>
+                }
+
+                <div
+                  class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center"
+                >
+                  <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white"
+                    >+ Add to Bag</span
+                  >
+                </div>
+              </div>
+
+              <div class="flex justify-between items-start text-xs tracking-wide px-1">
+                <div>
+                  <h5 class="font-medium text-neutral-800 uppercase text-[11px] tracking-wider">
+                    {{ product.name }}
+                  </h5>
+                  <p class="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">
+                    {{ product.materials?.[0] || 'Fabric Form' }}
+                  </p>
+                </div>
+                <span class="font-mono text-neutral-600">${{ product.price }}</span>
+              </div>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </section>
+  </main>
+</div>
