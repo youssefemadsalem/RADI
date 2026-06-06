@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal, CUSTOM_ELEMENTS_SCHEMA, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/service/auth';
 import { ProductService } from '../../core/service/product';
@@ -20,7 +20,7 @@ register();
 })
 export class Shop implements OnInit {
   readonly shoppingBag = LucideShoppingBag; 
-  
+  private platformId = inject(PLATFORM_ID);
   public cartService = inject(Cart);
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -76,18 +76,33 @@ export class Shop implements OnInit {
     this.cartService.openCart();
   }
 
-  private triggerSwiperUpdate(): void {
-    setTimeout(() => {
-      const swiperContainers = document.querySelectorAll('swiper-container');
-      swiperContainers.forEach((swiper: any) => {
-        if (swiper && swiper.initialize) {
-          swiper.initialize();
-        } else if (swiper && swiper.swiper) {
-          swiper.swiper.update();
-        }
-      });
-    }, 100);
+
+
+
+
+private triggerSwiperUpdate(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const swiperContainers = document.querySelectorAll('swiper-container');
+        swiperContainers.forEach((swiper: any) => {
+          if (swiper) {
+            // Remove the fallback layout class completely to unlock Swiper's calculation engine
+            swiper.classList.remove('ssr-loading');
+            
+            // Cleanly boot or re-verify parameters
+            if (swiper.initialize) {
+              swiper.initialize();
+            } else if (swiper.swiper) {
+              swiper.swiper.update();
+            }
+          }
+        });
+      }, 100);
+    }
   }
+
+
+
 
   handleUserLogout(): void {
     this.authService.logout();
