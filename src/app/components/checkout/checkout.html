@@ -1,0 +1,148 @@
+<div class="min-h-screen bg-white text-neutral-900 font-sans antialiased selection:bg-black selection:text-white">
+  <header class="w-full py-6 border-b border-neutral-100 flex justify-center items-center bg-white sticky top-0 z-40">
+    <a href="/shop" class="h-6 tracking-[0.4em] font-serif text-xl font-bold uppercase select-none">RADI</a>
+  </header>
+
+  <div class="max-w-350 mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-73px)]">
+    <main class="lg:col-span-7 px-6 py-12 md:px-12 lg:pr-16 border-r border-neutral-100 space-y-10">
+      <form [formGroup]="checkoutForm" (ngSubmit)="submitOrder()" class="space-y-8">
+        
+        <div class="space-y-4">
+          <div class="flex justify-between items-baseline">
+            <h3 class="text-lg font-medium tracking-tight text-neutral-950">Contact</h3>
+            <a href="/auth" class="text-xs text-neutral-500 underline underline-offset-4 hover:text-black">Sign in</a>
+          </div>
+          <div class="relative">
+            <input type="email" formControlName="email" placeholder="Email" class="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black focus:ring-1 focus:ring-black placeholder-transparent peer" id="email" />
+            <label for="email" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Email</label>
+            @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
+              <p class="text-xs text-red-600 mt-1">Provide a valid email format.</p>
+            }
+          </div>
+          <label class="flex items-center space-x-3 cursor-pointer select-none">
+            <input type="checkbox" formControlName="emailMarketing" class="w-4 h-4 rounded border-neutral-300 text-black accent-black" />
+            <span class="text-xs text-neutral-600">Email me with news and offers</span>
+          </label>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-lg font-medium tracking-tight text-neutral-950">Delivery</h3>
+          <div class="relative">
+            <select class="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-md text-sm appearance-none focus:none cursor-not-allowed" disabled><option>Egypt</option></select>
+            <label class="absolute left-4 top-1 text-[10px] text-neutral-400">Country/Region</label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="relative">
+              <input type="text" formControlName="firstName" placeholder="First name" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="firstName" />
+              <label for="firstName" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">First name</label>
+            </div>
+            <div class="relative">
+              <input type="text" formControlName="lastName" placeholder="Last name" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="lastName" />
+              <label for="lastName" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Last name</label>
+            </div>
+          </div>
+
+          <div class="relative">
+            <input type="text" formControlName="address" placeholder="Address" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="address" />
+            <label for="address" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Address</label>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <input type="text" formControlName="city" placeholder="City" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
+            <select formControlName="governorate" class="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-md text-sm focus:border-black"><option value="Cairo">Cairo</option><option value="Giza">Giza</option><option value="Alexandria">Alexandria</option></select>
+            <input type="text" formControlName="postalCode" placeholder="Postal code" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
+          </div>
+
+          <input type="tel" formControlName="phone" placeholder="Phone mobile connection connection reference" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
+        </div>
+
+        <div class="space-y-3">
+          <h3 class="text-base font-medium text-neutral-950">Shipping method</h3>
+          <div class="w-full flex items-center justify-between p-4 bg-neutral-50/50 border border-neutral-900 rounded-md text-xs">
+            <div>
+              <span class="font-semibold text-neutral-900 block">Shipping (2-3 Weeks Lead-Time)</span>
+              <span class="text-neutral-400 block">Hub Assigned Cargo Allocation Track Line</span>
+            </div>
+            <span class="font-mono font-bold text-neutral-950">E£100.00</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-lg font-medium tracking-tight text-neutral-950">Payment</h3>
+          <div class="border border-neutral-200 rounded-md overflow-hidden bg-white">
+            <label class="flex items-center space-x-3 p-4 cursor-pointer hover:bg-neutral-50/50 border-b border-neutral-100" [ngClass]="{'bg-neutral-50/50 font-medium': checkoutForm.get('paymentMethod')?.value === 'COD'}">
+              <input type="radio" value="COD" formControlName="paymentMethod" class="w-4 h-4 text-black accent-black" />
+              <span class="text-xs text-neutral-800">Cash on Delivery (COD)</span>
+            </label>
+
+            <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-neutral-50/50" [ngClass]="{'bg-neutral-50/50 font-medium': checkoutForm.get('paymentMethod')?.value === 'INSTAPAY'}">
+              <div class="flex items-center space-x-3">
+                <input type="radio" value="INSTAPAY" formControlName="paymentMethod" class="w-4 h-4 text-black accent-black" />
+                <span class="text-xs text-neutral-800">Instapay Transfer Network</span>
+              </div>
+            </label>
+
+            @if (checkoutForm.get('paymentMethod')?.value === 'INSTAPAY') {
+              <div class="p-5 bg-neutral-50 border-t border-neutral-200 space-y-4 animate-fadeIn">
+                <div class="p-4 bg-white border border-neutral-200 rounded-md text-xs flex justify-between items-center">
+                  <span class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest">Instapay Target Address</span>
+                  <span class="font-mono font-bold bg-neutral-100 px-2 py-0.5 rounded text-black select-all">01012024205</span>
+                </div>
+
+                <div (dragover)="onDragOver($event)" (drop)="onFileDropped($event)" (click)="fileFileInput.click()" class="border-2 border-dashed border-neutral-300 hover:border-black bg-white rounded-md p-6 text-center cursor-pointer group space-y-2">
+                  <input type="file" #fileFileInput (change)="onFileSelected($event)" accept="image/*" class="hidden" />
+                  @if (!screenshotPreview()) {
+                    <p class="text-xs text-neutral-400 group-hover:text-black transition-colors">Click or drag your transfer confirmation screenshot asset here</p>
+                  } @else {
+                    <div class="flex flex-col items-center space-y-2">
+                      <img [src]="screenshotPreview()" class="h-24 w-auto object-contain rounded border border-neutral-200" alt="Receipt Preview" />
+                      <p class="text-[10px] font-mono text-neutral-500">✓ Attached: {{ screenshotFile?.name }}</p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="checkoutForm.invalid || isSubmitting() || cartService.items().length === 0" class="w-full py-4 bg-black hover:bg-neutral-900 disabled:bg-neutral-200 disabled:text-neutral-400 text-white rounded-md font-medium tracking-[0.15em] text-xs uppercase transition-all shadow-sm">
+          {{ isSubmitting() ? 'Connecting Security Protocol Layer...' : 'Pay Now' }}
+        </button>
+      </form>
+    </main>
+
+    <aside class="lg:col-span-5 bg-neutral-50/60 px-6 py-12 md:px-12 space-y-8">
+      <div class="space-y-4 max-h-105 overflow-y-auto pr-2 custom-scrollbar">
+        @for (item of cartService.items(); track item._id + item.selectedSize + item.selectedColor) {
+          <div class="flex items-center justify-between text-xs tracking-wide">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-20 bg-white border border-neutral-200 rounded overflow-hidden relative shrink-0">
+                @if (item.image) { <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover" /> }
+                <span class="absolute -top-1.5 -right-1.5 bg-neutral-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-sm">{{ item.quantity }}</span>
+              </div>
+              <div>
+                <h4 class="font-medium text-neutral-900 uppercase text-[11px] tracking-wider">{{ item.name }}</h4>
+                <p class="text-[10px] text-neutral-400 font-mono">{{ item.selectedColor }} / {{ item.selectedSize }}</p>
+              </div>
+            </div>
+            <span class="font-mono text-neutral-700 font-medium">E£{{ (item.price * item.quantity) | number:'1.2-2' }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="space-y-2 text-xs border-t border-neutral-200/60 pt-4 text-neutral-600">
+        <div class="flex justify-between"><span>Subtotal</span><span class="font-mono text-neutral-800">E£{{ cartService.subtotal() | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between"><span>Shipping</span><span class="font-mono text-neutral-800">E£{{ shippingCost | number:'1.2-2' }}</span></div>
+      </div>
+
+      <div class="flex justify-between items-baseline pt-4 border-t border-neutral-200 text-neutral-900">
+        <span class="text-base font-semibold">Total</span>
+        <div class="flex items-baseline space-x-2">
+          <span class="text-[10px] text-neutral-400 font-mono">EGP</span>
+          <span class="text-xl font-bold font-mono">E£{{ finalTotal | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
