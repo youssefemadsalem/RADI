@@ -1,6 +1,8 @@
 import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+// 🌟 ADDED: Import Router from the Angular router module
+import { Router } from '@angular/router'; 
 import { Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -9,6 +11,7 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router); 
   private apiUrl = 'http://localhost:5000/api/auth';
 
   currentUser = signal<{ email: string; role: string } | null>(null);
@@ -54,9 +57,15 @@ export class AuthService {
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // 1. Flush local authentication cache storage keys
       localStorage.clear();
+      
+      // 2. Reset reactive application state signals back to defaults
       this.currentUser.set(null);
       this.isAuthenticated.set(false);
+      
+      // 🌟 3. FIXED: Kick the user back to the auth page instantly
+      this.router.navigate(['/auth']);
     }
   }
 }

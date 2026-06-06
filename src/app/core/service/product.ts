@@ -6,11 +6,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductService {
-  private http = inject(HttpClient);
+private http = inject(HttpClient);
   private apiUrl = 'http://localhost:5000/api/products';
 
   getProducts(filterType?: string): Observable<any[]> {
     const url = filterType ? `${this.apiUrl}?filterType=${filterType}` : this.apiUrl;
     return this.http.get<any[]>(url);
+  }
+
+  getProductById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 }

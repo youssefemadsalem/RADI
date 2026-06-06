@@ -7,13 +7,14 @@ import { register } from 'swiper/element/bundle';
 import { LucideDynamicIcon, LucideShoppingBag } from '@lucide/angular';
 import { Cart } from '../../core/service/cart'; 
 import { CartDrawer } from '../cart-drawer/cart-drawer'; 
+import { RouterLink } from '@angular/router';
 
 register();
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, LucideDynamicIcon, CartDrawer], 
+  imports: [CommonModule, CartDrawer ,RouterLink], 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './shop.html',
   styleUrl: './shop.css',

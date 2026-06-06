@@ -4,22 +4,37 @@ import { adminGuard } from './core/guards/admin-guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth',
+    redirectTo: 'shop', // Redirect straight to shop now that layouts wrapper handles structural targets
     pathMatch: 'full',
   },
+  
+  // 🚪 1. STANDALONE UNPROTECTED AUTH ROUTE (No Navbar, No Footer)
   {
     path: 'auth',
     loadComponent: () => import('./components/auth/auth').then((m) => m.Auth),
   },
+
+  // 🛍️ 2. PROTECTED MULTI-PAGE STORE ARCHITECTURE WRAPPER (With Navbar and Footer)
   {
-    path: 'shop',
-    loadComponent: () => import('./components/shop/shop').then((m) => m.Shop),
+    path: '',
+    loadComponent: () => import('./components/layouts/main-layout/main-layout').then((m) => m.MainLayout),
+    children: [
+      {
+        path: 'shop',
+        loadComponent: () => import('./components/shop/shop').then((m) => m.Shop),
+      },
+      {
+        path: 'product/:id',
+        loadComponent: () => import('./components/product-details/product-details').then((m) => m.ProductDetails),
+      },
+      {
+        path: 'checkout',
+        loadComponent: () => import('./components/checkout/checkout').then((m) => m.Checkout),
+      },
+    ]
   },
-  // ✅ ADDED: Checkout Route Dynamic Registration
-  {
-    path: 'checkout',
-    loadComponent: () => import('./components/checkout/checkout').then((m) => m.Checkout),
-  },
+
+  // ⚙️ 3. STANDALONE ADMINISTRATIVE BACKOFFICE PANEL ARCHITECTURE
   {
     path: 'admin',
     canActivate: [adminGuard],
@@ -40,6 +55,8 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // Catch-all Wildcard fallback route loop
   {
     path: '**',
     redirectTo: 'auth',
