@@ -1,32 +1,29 @@
+// checkout.ts
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Cart } from '../../core/service/cart';
-import { Checkout as CheckoutService } from '../../core/service/checkout'; //
+import { Checkout as CheckoutService } from '../../core/service/checkout'; 
 
 @Component({
   selector: 'app-checkout',
+  standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
 export class Checkout implements OnInit {
-
-
-
-
-private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private router = inject(Router);
   private checkoutService = inject(CheckoutService); 
-  
   public cartService = inject(Cart);
 
   checkoutForm!: FormGroup;
   screenshotFile: File | null = null;
   screenshotPreview = signal<string | null>(null);
   isSubmitting = signal<boolean>(false);
-  shippingCost = 100; // Fixed EGP rate
+  shippingCost = 100;
 
   ngOnInit(): void {
     this.initCheckoutForm();
@@ -43,6 +40,7 @@ private fb = inject(FormBuilder);
       city: ['', Validators.required],
       governorate: ['Cairo', Validators.required],
       postalCode: [''],
+      // Regex correctly locks prefixes to 010, 011, 012, and 015 followed by 8 trailing digits
       phone: ['', [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)]],
       saveInfo: [false],
       paymentMethod: ['COD', Validators.required],
@@ -92,13 +90,12 @@ private fb = inject(FormBuilder);
 
   submitOrder(): void {
     if (this.checkoutForm.invalid || this.cartService.items().length === 0) {
-      this.checkoutForm.markAllAsTouched();
+      this.checkoutForm.markAllAsTouched(); // Force all errors to show red simultaneously
       return;
     }
 
     this.isSubmitting.set(true);
 
-    // ✅ Clean routing through service instance channel
     this.checkoutService.placeOrder(
       this.checkoutForm.value,
       this.cartService.items(),
@@ -108,7 +105,7 @@ private fb = inject(FormBuilder);
       this.screenshotFile
     ).subscribe({
       next: (response) => {
-        this.cartService.items.set([]); // Flush internal basket signals
+        this.cartService.items.set([]); 
         this.isSubmitting.set(false);
         this.router.navigate(['/order-success'], { queryParams: { code: response.orderCode } });
       },
@@ -119,7 +116,4 @@ private fb = inject(FormBuilder);
       }
     });
   }
-
-
-
 }

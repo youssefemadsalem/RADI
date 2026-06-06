@@ -13,10 +13,17 @@
             <a href="/auth" class="text-xs text-neutral-500 underline underline-offset-4 hover:text-black">Sign in</a>
           </div>
           <div class="relative">
-            <input type="email" formControlName="email" placeholder="Email" class="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black focus:ring-1 focus:ring-black placeholder-transparent peer" id="email" />
+            <input 
+              type="email" 
+              formControlName="email" 
+              placeholder="Email" 
+              class="w-full px-4 py-3.5 bg-white border rounded-md text-sm transition-all focus:outline-none placeholder-transparent peer" 
+              [ngClass]="(checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-neutral-200 focus:border-black focus:ring-1 focus:ring-black'"
+              id="email" 
+            />
             <label for="email" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Email</label>
             @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
-              <p class="text-xs text-red-600 mt-1">Provide a valid email format.</p>
+              <p class="text-xs text-red-600 mt-1 font-medium">Provide a valid email address format.</p>
             }
           </div>
           <label class="flex items-center space-x-3 cursor-pointer select-none">
@@ -34,27 +41,101 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div class="relative">
-              <input type="text" formControlName="firstName" placeholder="First name" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="firstName" />
+              <input 
+                type="text" 
+                formControlName="firstName" 
+                placeholder="First name" 
+                class="w-full px-4 py-3.5 border rounded-md text-sm transition-all focus:outline-none placeholder-transparent peer" 
+                [ngClass]="(checkoutForm.get('firstName')?.touched && checkoutForm.get('firstName')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+                id="firstName" 
+              />
               <label for="firstName" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">First name</label>
+              @if (checkoutForm.get('firstName')?.touched && checkoutForm.get('firstName')?.invalid) {
+                <p class="text-xs text-red-600 mt-1 font-medium">First name is required.</p>
+              }
             </div>
+            
             <div class="relative">
-              <input type="text" formControlName="lastName" placeholder="Last name" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="lastName" />
+              <input 
+                type="text" 
+                formControlName="lastName" 
+                placeholder="Last name" 
+                class="w-full px-4 py-3.5 border rounded-md text-sm transition-all focus:outline-none placeholder-transparent peer" 
+                [ngClass]="(checkoutForm.get('lastName')?.touched && checkoutForm.get('lastName')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+                id="lastName" 
+              />
               <label for="lastName" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Last name</label>
+              @if (checkoutForm.get('lastName')?.touched && checkoutForm.get('lastName')?.invalid) {
+                <p class="text-xs text-red-600 mt-1 font-medium">Last name is required.</p>
+              }
             </div>
           </div>
 
           <div class="relative">
-            <input type="text" formControlName="address" placeholder="Address" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm transition-all focus:outline-none focus:border-black placeholder-transparent peer" id="address" />
+            <input 
+              type="text" 
+              formControlName="address" 
+              placeholder="Address" 
+              class="w-full px-4 py-3.5 border rounded-md text-sm transition-all focus:outline-none placeholder-transparent peer" 
+              [ngClass]="(checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+              id="address" 
+            />
             <label for="address" class="absolute left-4 top-3.5 text-neutral-400 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-[&:not(:placeholder-shown)]:top-1.5 peer-[&:not(:placeholder-shown)]:text-[10px]">Address</label>
+            @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
+              <p class="text-xs text-red-600 mt-1 font-medium">Shipping address coordinates are required.</p>
+            }
           </div>
 
-          <div class="grid grid-cols-3 gap-4">
-            <input type="text" formControlName="city" placeholder="City" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
-            <select formControlName="governorate" class="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-md text-sm focus:border-black"><option value="Cairo">Cairo</option><option value="Giza">Giza</option><option value="Alexandria">Alexandria</option></select>
-            <input type="text" formControlName="postalCode" placeholder="Postal code" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <input 
+                type="text" 
+                formControlName="city" 
+                placeholder="City" 
+                class="w-full px-4 py-3.5 border rounded-md text-sm focus:outline-none" 
+                [ngClass]="(checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+              />
+              @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) {
+                <p class="text-xs text-red-600 mt-1 font-medium">City is required.</p>
+              }
+            </div>
+
+            <div>
+              <select 
+                formControlName="governorate" 
+                class="w-full px-4 py-3.5 bg-white border rounded-md text-sm focus:outline-none"
+                [ngClass]="(checkoutForm.get('governorate')?.touched && checkoutForm.get('governorate')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+              >
+                <option value="Cairo">Cairo</option>
+                <option value="Giza">Giza</option>
+                <option value="Alexandria">Alexandria</option>
+              </select>
+            </div>
+
+            <div>
+              <input 
+                type="text" 
+                formControlName="postalCode" 
+                placeholder="Postal code" 
+                class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black focus:outline-none" 
+              />
+            </div>
           </div>
 
-          <input type="tel" formControlName="phone" placeholder="Phone mobile connection connection reference" class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black" />
+          <div>
+            <input 
+              type="tel" 
+              formControlName="phone" 
+              placeholder="Mobile Phone (e.g., 01012345678)" 
+              class="w-full px-4 py-3.5 border rounded-md text-sm focus:outline-none" 
+              [ngClass]="(checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+            />
+            @if (checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) {
+              <p class="text-xs text-red-600 mt-1 font-medium">
+                Must be a valid Egyptian number starting with 010, 011, 012, or 015.
+              </p>
+            }
+          </div>
         </div>
 
         <div class="space-y-3">
@@ -90,10 +171,19 @@
                   <span class="font-mono font-bold bg-neutral-100 px-2 py-0.5 rounded text-black select-all">01012024205</span>
                 </div>
 
-                <div (dragover)="onDragOver($event)" (drop)="onFileDropped($event)" (click)="fileFileInput.click()" class="border-2 border-dashed border-neutral-300 hover:border-black bg-white rounded-md p-6 text-center cursor-pointer group space-y-2">
+                <div 
+                  (dragover)="onDragOver($event)" 
+                  (drop)="onFileDropped($event)" 
+                  (click)="fileFileInput.click()" 
+                  class="border-2 border-dashed bg-white rounded-md p-6 text-center cursor-pointer group space-y-2 transition-colors"
+                  [ngClass]="(checkoutForm.get('screenshotRequired')?.touched && checkoutForm.get('screenshotRequired')?.invalid) ? 'border-red-500 bg-red-50/10' : 'border-neutral-300 hover:border-black'"
+                >
                   <input type="file" #fileFileInput (change)="onFileSelected($event)" accept="image/*" class="hidden" />
                   @if (!screenshotPreview()) {
                     <p class="text-xs text-neutral-400 group-hover:text-black transition-colors">Click or drag your transfer confirmation screenshot asset here</p>
+                    @if (checkoutForm.get('screenshotRequired')?.touched && checkoutForm.get('screenshotRequired')?.invalid) {
+                      <p class="text-xs text-red-600 font-medium">An Instapay transfer receipt screenshot is required.</p>
+                    }
                   } @else {
                     <div class="flex flex-col items-center space-y-2">
                       <img [src]="screenshotPreview()" class="h-24 w-auto object-contain rounded border border-neutral-200" alt="Receipt Preview" />
@@ -106,7 +196,7 @@
           </div>
         </div>
 
-        <button type="submit" [disabled]="checkoutForm.invalid || isSubmitting() || cartService.items().length === 0" class="w-full py-4 bg-black hover:bg-neutral-900 disabled:bg-neutral-200 disabled:text-neutral-400 text-white rounded-md font-medium tracking-[0.15em] text-xs uppercase transition-all shadow-sm">
+        <button type="submit" [disabled]="isSubmitting() || cartService.items().length === 0" class="w-full py-4 bg-black hover:bg-neutral-900 disabled:bg-neutral-200 disabled:text-neutral-400 text-white rounded-md font-medium tracking-[0.15em] text-xs uppercase transition-all shadow-sm">
           {{ isSubmitting() ? 'Connecting Security Protocol Layer...' : 'Pay Now' }}
         </button>
       </form>
