@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/service/auth';
 
-// Custom type structure definition for controlling active form views
 type AuthViewState = 'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD';
 
 @Component({
@@ -18,15 +17,16 @@ export class Auth {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Layout Engine States Tracker
   currentView = signal<AuthViewState>('LOGIN');
   feedbackMessage = signal<{ text: string; isSuccess: boolean } | null>(null);
+  
+  // Track form submission state
+  isSubmitting = signal<boolean>(false);
 
-  // Form Fields State Models
-  email = '';
-  password = '';
-  otpCode = '';
-  newPassword = '';
+  email = signal<string>('');
+  password = signal<string>('');
+  otpCode = signal<string>('');
+  newPassword = signal<string>('');
 
   switchView(target: AuthViewState) {
     this.currentView.set(target);
@@ -35,53 +35,69 @@ export class Auth {
 
   triggerAuthAction() {
     this.feedbackMessage.set(null);
+    this.isSubmitting.set(true); // Start loading spinner / disable buttons
 
     switch (this.currentView()) {
       case 'LOGIN':
-        this.authService.login({ email: this.email, password: this.password }).subscribe({
+        this.authService.login({ email: this.email(), password: this.password() }).subscribe({
           next: (res) => {
             if (res.user.role === 'admin') this.router.navigate(['/admin']);
             else this.router.navigate(['/shop']);
           },
-          error: (err) => this.setToast(err.error?.message || 'Access denied. Check inputs.'),
+          error: (err) => {
+            this.setToast(err.error?.message || 'Access denied. Check inputs.');
+            this.isSubmitting.set(false);
+          },
+          complete: () => this.isSubmitting.set(false)
         });
         break;
 
       case 'REGISTER':
-        this.authService.register({ email: this.email, password: this.password }).subscribe({
+        this.authService.register({ email: this.email(), password: this.password() }).subscribe({
           next: () => {
             this.setToast('Profile generated cleanly! Access open.', true);
             this.switchView('LOGIN');
           },
-          error: (err) => this.setToast(err.error?.message || 'Profile formation broken.'),
+          error: (err) => {
+            this.setToast(err.error?.message || 'Profile formation broken.');
+            this.isSubmitting.set(false);
+          },
+          complete: () => this.isSubmitting.set(false)
         });
         break;
 
       case 'FORGOT_PASSWORD':
-        this.authService.forgotPassword(this.email).subscribe({
+        this.authService.forgotPassword(this.email()).subscribe({
           next: (res) => {
             this.setToast(res.message || 'OTP transmitted to mail.', true);
-            this.switchView('RESET_PASSWORD'); // Pass straight to verify field form step
+            this.switchView('RESET_PASSWORD'); 
           },
-          error: (err) => this.setToast(err.error?.message || 'Request transmission failure.'),
+          error: (err) => {
+            this.setToast(err.error?.message || 'Request transmission failure.');
+            this.isSubmitting.set(false);
+          },
+          complete: () => this.isSubmitting.set(false)
         });
         break;
 
       case 'RESET_PASSWORD':
         const resetPayload = {
-          email: this.email,
-          otp: this.otpCode,
-          newPassword: this.newPassword,
+          email: this.email(),
+          otp: this.otpCode(),
+          newPassword: this.newPassword(),
         };
         this.authService.resetPassword(resetPayload).subscribe({
           next: (res) => {
             this.setToast(res.message || 'Identity altered safely.', true);
             this.switchView('LOGIN');
-            // Clean fields
-            this.otpCode = '';
-            this.newPassword = '';
+            this.otpCode.set('');
+            this.newPassword.set('');
           },
-          error: (err) => this.setToast(err.error?.message || 'Security override failed.'),
+          error: (err) => {
+            this.setToast(err.error?.message || 'Security override failed.');
+            this.isSubmitting.set(false);
+          },
+          complete: () => this.isSubmitting.set(false)
         });
         break;
     }

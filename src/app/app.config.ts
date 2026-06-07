@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -11,7 +11,9 @@ export const appConfig: ApplicationConfig = {
     provideLucideIcons(LucideShoppingBag), 
 
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(routes, withViewTransitions(), withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      })),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
   ],

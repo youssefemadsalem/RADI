@@ -7,7 +7,7 @@
         </h2>
         <h1
           class="font-serif text-4xl tracking-[0.25em] font-light uppercase cursor-pointer"
-          (click)="switchView('LOGIN')"
+          (click)="!isSubmitting() && switchView('LOGIN')"
         >
           RADI
         </h1>
@@ -36,8 +36,9 @@
               name="email"
               [(ngModel)]="email"
               required
+              [disabled]="isSubmitting()"
               placeholder="identity@domain.com"
-              class="bg-transparent border-none text-sm tracking-wide focus:outline-none placeholder-neutral-200 py-0.5"
+              class="bg-transparent border-none text-sm tracking-wide focus:outline-none placeholder-neutral-200 py-0.5 disabled:opacity-50"
             />
           </div>
 
@@ -50,8 +51,9 @@
               name="password"
               [(ngModel)]="password"
               required
+              [disabled]="isSubmitting()"
               placeholder="••••••••"
-              class="bg-transparent border-none text-sm tracking-widest focus:outline-none placeholder-neutral-200 py-0.5"
+              class="bg-transparent border-none text-sm tracking-widest focus:outline-none placeholder-neutral-200 py-0.5 disabled:opacity-50"
             />
           </div>
         }
@@ -70,8 +72,9 @@
               name="email"
               [(ngModel)]="email"
               required
+              [disabled]="isSubmitting()"
               placeholder="identity@domain.com"
-              class="bg-transparent border-none text-sm tracking-wide focus:outline-none placeholder-neutral-200 py-0.5"
+              class="bg-transparent border-none text-sm tracking-wide focus:outline-none placeholder-neutral-200 py-0.5 disabled:opacity-50"
             />
           </div>
         }
@@ -92,8 +95,9 @@
               [(ngModel)]="otpCode"
               required
               maxlength="6"
+              [disabled]="isSubmitting()"
               placeholder="000000"
-              class="bg-transparent border-none text-sm tracking-[0.6em] font-mono focus:outline-none placeholder-neutral-200 py-0.5"
+              class="bg-transparent border-none text-sm tracking-[0.6em] font-mono focus:outline-none placeholder-neutral-200 py-0.5 disabled:opacity-50"
             />
           </div>
 
@@ -106,28 +110,33 @@
               name="newPassword"
               [(ngModel)]="newPassword"
               required
+              [disabled]="isSubmitting()"
               placeholder="••••••••"
-              class="bg-transparent border-none text-sm tracking-widest focus:outline-none placeholder-neutral-200 py-0.5"
+              class="bg-transparent border-none text-sm tracking-widest focus:outline-none placeholder-neutral-200 py-0.5 disabled:opacity-50"
             />
           </div>
         }
 
         <button
           type="submit"
-          [disabled]="!formContext.form.valid"
-          class="w-full bg-black text-white py-4 text-xs font-semibold uppercase tracking-[0.35em] hover:bg-neutral-900 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+          [disabled]="!formContext.form.valid || isSubmitting()"
+          class="flex items-center justify-center space-x-2 w-full bg-black text-white py-4 text-xs font-semibold uppercase tracking-[0.35em] hover:bg-neutral-900 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          @if (currentView() === 'LOGIN') {
-            Enter Workspace
-          }
-          @if (currentView() === 'REGISTER') {
-            Build Profile
-          }
-          @if (currentView() === 'FORGOT_PASSWORD') {
-            Transmit Key
-          }
-          @if (currentView() === 'RESET_PASSWORD') {
-            Rewrite Identity
+          @if (!isSubmitting()) {
+            <span>
+              @if (currentView() === 'LOGIN') { Enter Workspace }
+              @if (currentView() === 'REGISTER') { Build Profile }
+              @if (currentView() === 'FORGOT_PASSWORD') { Transmit Key }
+              @if (currentView() === 'RESET_PASSWORD') { Rewrite Identity }
+            </span>
+          } @else {
+            <div class="flex items-center space-x-1.5 lowcase tracking-normal normal-case font-normal text-neutral-400">
+              <svg class="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span class="text-[10px] tracking-[0.2em] uppercase pl-1 text-white/80">Processing...</span>
+            </div>
           }
         </button>
       </form>
@@ -138,15 +147,17 @@
         @if (currentView() === 'LOGIN') {
           <button
             type="button"
+            [disabled]="isSubmitting()"
             (click)="switchView('REGISTER')"
-            class="hover:text-black transition-colors font-medium"
+            class="hover:text-black transition-colors font-medium disabled:opacity-30"
           >
             No profile? Generate coordinates
           </button>
           <button
             type="button"
+            [disabled]="isSubmitting()"
             (click)="switchView('FORGOT_PASSWORD')"
-            class="text-neutral-300 hover:text-black text-[9px] tracking-widest transition-colors pt-2"
+            class="text-neutral-300 hover:text-black text-[9px] tracking-widest transition-colors pt-2 disabled:opacity-30"
           >
             Lost key sequence?
           </button>
@@ -155,8 +166,9 @@
         @if (currentView() === 'REGISTER') {
           <button
             type="button"
+            [disabled]="isSubmitting()"
             (click)="switchView('LOGIN')"
-            class="hover:text-black transition-colors font-medium"
+            class="hover:text-black transition-colors font-medium disabled:opacity-30"
           >
             Valid credentials? Login here
           </button>
@@ -165,8 +177,9 @@
         @if (currentView() === 'FORGOT_PASSWORD' || currentView() === 'RESET_PASSWORD') {
           <button
             type="button"
+            [disabled]="isSubmitting()"
             (click)="switchView('LOGIN')"
-            class="hover:text-black transition-colors font-medium"
+            class="hover:text-black transition-colors font-medium disabled:opacity-30"
           >
             Abort and return to Login node
           </button>

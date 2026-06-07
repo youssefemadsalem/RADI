@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/service/auth';
 import { ProductService } from '../../core/service/product';
 import { register } from 'swiper/element/bundle';
-import { LucideDynamicIcon, LucideShoppingBag } from '@lucide/angular';
+import { LucideShoppingBag } from '@lucide/angular';
 import { Cart } from '../../core/service/cart'; 
 import { CartDrawer } from '../cart-drawer/cart-drawer'; 
 import { RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ register();
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, CartDrawer ,RouterLink], 
+  imports: [CommonModule, CartDrawer, RouterLink], 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './shop.html',
   styleUrl: './shop.css',
@@ -31,6 +31,9 @@ export class Shop implements OnInit {
   bestSellers = signal<any[]>([]);
   clothesCollection = signal<any[]>([]);
   
+  // Controls shop skeletal spinners / full page loaders
+  isLoading = signal<boolean>(false);
+  
   cartCount = this.cartService.cartCount;
 
   ngOnInit(): void {
@@ -38,9 +41,13 @@ export class Shop implements OnInit {
   }
 
   loadCategorizedCatalog(): void {
+    this.isLoading.set(true); // Activate loading UI block
+
+    // Using a counter or tracking the main streams to cleanly unset loading
     this.productService.getProducts('new arrivals').subscribe({
       next: (data) => { this.newArrivals.set(data); this.triggerSwiperUpdate(); },
       error: (err) => console.error('Failed fetching new arrivals:', err),
+      complete: () => this.isLoading.set(false) // Toggle off when primary content renders
     });
 
     this.productService.getProducts('best sellers').subscribe({
@@ -70,27 +77,21 @@ export class Shop implements OnInit {
 
     if (typeof this.cartService.addItem === 'function') {
       this.cartService.addItem(itemToSubmit);
-    } else {
+    } else if (this.cartService.items && typeof this.cartService.items.update === 'function') {
       this.cartService.items.update(items => [...items, itemToSubmit]);
     }
 
     this.cartService.openCart();
   }
 
-
-
-
-
-private triggerSwiperUpdate(): void {
+  private triggerSwiperUpdate(): void {
     if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => {
         const swiperContainers = document.querySelectorAll('swiper-container');
         swiperContainers.forEach((swiper: any) => {
           if (swiper) {
-            // Remove the fallback layout class completely to unlock Swiper's calculation engine
             swiper.classList.remove('ssr-loading');
             
-            // Cleanly boot or re-verify parameters
             if (swiper.initialize) {
               swiper.initialize();
             } else if (swiper.swiper) {
@@ -101,9 +102,6 @@ private triggerSwiperUpdate(): void {
       }, 100);
     }
   }
-
-
-
 
   handleUserLogout(): void {
     this.authService.logout();
