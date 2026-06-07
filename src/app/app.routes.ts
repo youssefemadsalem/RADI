@@ -31,6 +31,10 @@ export const routes: Routes = [
         path: 'checkout',
         loadComponent: () => import('./components/checkout/checkout').then((m) => m.Checkout),
       },
+      {
+        path: '404',
+        loadComponent: () => import('./components/not-found/not-found').then((m) => m.NotFound),
+      }
     ]
   },
 
@@ -57,8 +61,9 @@ export const routes: Routes = [
   },
 
   // Catch-all Wildcard fallback route loop
-  {
+{
     path: '**',
-    redirectTo: 'auth',
+    redirectTo: '404',
+    pathMatch: 'full'
   },
 ];
