@@ -1,7 +1,7 @@
 @if (cartService.isOpen()) {
   <div 
     class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[100] transition-opacity duration-500"
-    (click)="cartService.closeCart()"
+    (click)="!isProcessing() && cartService.closeCart()"
   ></div>
 }
 
@@ -15,8 +15,9 @@
     <h2 class="font-serif text-xl tracking-[0.15em] font-medium uppercase text-black">Shopping Bag</h2>
     <button 
       type="button" 
+      [disabled]="isProcessing()"
       (click)="cartService.closeCart()" 
-      class="text-neutral-400 hover:text-black transition-colors p-1 flex items-center justify-center"
+      class="text-neutral-400 hover:text-black transition-colors p-1 flex items-center justify-center disabled:opacity-30"
     >
       <svg [lucideIcon]="X" class="w-5 h-5 stroke-[1.5]"></svg>
     </button>
@@ -44,8 +45,9 @@
                 </h3>
                 <button 
                   type="button" 
+                  [disabled]="isProcessing()"
                   (click)="cartService.removeItem(item._id, item.selectedSize, item.selectedColor)" 
-                  class="text-neutral-400 hover:text-red-700 transition-colors flex items-center"
+                  class="text-neutral-400 hover:text-red-700 transition-colors flex items-center disabled:opacity-30"
                 >
                   <svg [lucideIcon]="X" class="w-3.5 h-3.5 stroke-2"></svg>
                 </button>
@@ -56,19 +58,21 @@
             </div>
 
             <div class="flex justify-between items-end">
-              <div class="flex items-center border border-neutral-200 h-7 text-neutral-600 font-mono">
+              <div class="flex items-center border border-neutral-200 h-7 text-neutral-600 font-mono" [class.opacity-40]="isProcessing()">
                 <button 
                   type="button" 
+                  [disabled]="isProcessing()"
                   (click)="cartService.updateQuantity(item._id, -1, item.selectedSize, item.selectedColor)" 
-                  class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-r border-neutral-200"
+                  class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-r border-neutral-200 disabled:cursor-not-allowed"
                 >
                   <svg [lucideIcon]="Minus" class="w-3 h-3 stroke-2"></svg>
                 </button>
                 <span class="px-3 text-xs font-medium text-black min-w-6 text-center select-none">{{ item.quantity }}</span>
                 <button 
                   type="button" 
+                  [disabled]="isProcessing()"
                   (click)="cartService.updateQuantity(item._id, 1, item.selectedSize, item.selectedColor)" 
-                  class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-l border-neutral-200"
+                  class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-l border-neutral-200 disabled:cursor-not-allowed"
                 >
                   <svg [lucideIcon]="Plus" class="w-3 h-3 stroke-2"></svg>
                 </button>
@@ -102,10 +106,20 @@
     <button 
       type="button" 
       (click)="navigateToCheckout()"
-      [disabled]="cartService.items().length === 0"
-      class="w-full bg-black text-white text-xs uppercase tracking-[0.25em] font-medium py-4 hover:bg-neutral-900 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors duration-300 font-sans shadow-sm"
+      [disabled]="cartService.items().length === 0 || isProcessing()"
+      class="flex items-center justify-center space-x-2 w-full bg-black text-white text-xs uppercase tracking-[0.25em] font-medium py-4 hover:bg-neutral-900 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors duration-300 font-sans shadow-sm"
     >
-      Checkout
+      @if (!isProcessing()) {
+        <span>Checkout</span>
+      } @else {
+        <div class="flex items-center justify-center space-x-2">
+          <svg class="animate-spin h-3.5 w-3.5 text-neutral-400" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-neutral-400 normal-case tracking-[0.15em] font-normal text-[10px]">Preparing Order...</span>
+        </div>
+      }
     </button>
   </footer>
 
