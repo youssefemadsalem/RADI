@@ -40,7 +40,6 @@ export class Checkout implements OnInit {
       city: ['', Validators.required],
       governorate: ['Cairo', Validators.required],
       postalCode: [''],
-      // Regex correctly locks prefixes to 010, 011, 012, and 015 followed by 8 trailing digits
       phone: ['', [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)]],
       saveInfo: [false],
       paymentMethod: ['COD', Validators.required],
@@ -90,7 +89,7 @@ export class Checkout implements OnInit {
 
   submitOrder(): void {
     if (this.checkoutForm.invalid || this.cartService.items().length === 0) {
-      this.checkoutForm.markAllAsTouched(); // Force all errors to show red simultaneously
+      this.checkoutForm.markAllAsTouched(); 
       return;
     }
 
@@ -105,9 +104,15 @@ export class Checkout implements OnInit {
       this.screenshotFile
     ).subscribe({
       next: (response) => {
+        // 1. Flush out all items from your client-side reactive state store container
         this.cartService.items.set([]); 
         this.isSubmitting.set(false);
-        this.router.navigate(['/order-success'], { queryParams: { code: response.orderCode } });
+        
+        // 🌟 2. FIXED: Route straight to your clean /order-complete view 
+        // We pass your real backend database tracking ref ('orderCode' or 'code') through state or queryParams
+        this.router.navigate(['/order-complete'], { 
+          queryParams: { ref: response.orderCode || response.code || 'RAD-SUCCESS' } 
+        });
       },
       error: (err) => {
         console.error('Order submission fault:', err);
