@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin-guard';
+import { authGuard } from './core/guards/auth-guard'; // 🌟 IMPORTED: Fresh Client-side Phase Lock Guard
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'shop', // Redirect straight to shop now that layouts wrapper handles structural targets
+    redirectTo: 'shop', 
     pathMatch: 'full',
   },
   
@@ -17,6 +18,7 @@ export const routes: Routes = [
   // 🛍️ 2. PROTECTED MULTI-PAGE STORE ARCHITECTURE WRAPPER (With Navbar and Footer)
   {
     path: '',
+    canActivate: [authGuard], // 🌟 FIXED: Secures your entire user-facing layout tree from structural leaks
     loadComponent: () => import('./components/layouts/main-layout/main-layout').then((m) => m.MainLayout),
     children: [
       {
@@ -65,7 +67,7 @@ export const routes: Routes = [
   },
 
   // Catch-all Wildcard fallback route loop
-{
+  {
     path: '**',
     redirectTo: '404',
     pathMatch: 'full'

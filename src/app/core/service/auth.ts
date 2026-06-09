@@ -1,9 +1,8 @@
 import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-// 🌟 ADDED: Import Router from the Angular router module
 import { Router } from '@angular/router'; 
 import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +17,18 @@ export class AuthService {
   isAuthenticated = signal<boolean>(false);
 
   constructor() {
+    // Sync storage state instantly if running in the active user browser session
     if (isPlatformBrowser(this.platformId)) {
       const savedToken = localStorage.getItem('radi_token');
       const savedRole = localStorage.getItem('radi_role');
       const savedEmail = localStorage.getItem('radi_email');
+      
       if (savedToken && savedRole && savedEmail) {
         this.currentUser.set({ email: savedEmail, role: savedRole });
         this.isAuthenticated.set(true);
+      } else {
+        // Explicitly force defaults if cache indexes are completely empty
+        this.isAuthenticated.set(false);
       }
     }
   }
@@ -56,15 +60,17 @@ export class AuthService {
   }
 
   logout(): void {
+    // 1. Reset signals globally so components react immediately across both platforms
+    this.currentUser.set(null);
+    this.isAuthenticated.set(false);
+
     if (isPlatformBrowser(this.platformId)) {
-      // 1. Flush local authentication cache storage keys
-      localStorage.clear();
+      // 2. Flush browser identity cache local data references
+      localStorage.removeItem('radi_token');
+      localStorage.removeItem('radi_role');
+      localStorage.removeItem('radi_email');
       
-      // 2. Reset reactive application state signals back to defaults
-      this.currentUser.set(null);
-      this.isAuthenticated.set(false);
-      
-      // 🌟 3. FIXED: Kick the user back to the auth page instantly
+      // 3. Kick user out to auth route canvas
       this.router.navigate(['/auth']);
     }
   }
