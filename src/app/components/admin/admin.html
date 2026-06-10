@@ -72,16 +72,16 @@
 
       <div class="flex items-center space-x-4 text-neutral-400">
         <button class="p-2 hover:text-black transition-colors relative">
-          <svg [lucideIcon]="bellIcon" class="w-[18px] h-[18px] stroke-[1.5]"></svg>
+          <svg [lucideIcon]="bellIcon" class="w-4.5 h-4.5 stroke-[1.5]"></svg>
           <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-black rounded-full"></span>
         </button>
         <button class="p-2 hover:text-black transition-colors">
-          <svg [lucideIcon]="settingsIcon" class="w-[18px] h-[18px] stroke-[1.5]"></svg>
+          <svg [lucideIcon]="settingsIcon" class="w-4.5 h-4.5 stroke-[1.5]"></svg>
         </button>
       </div>
     </header>
 
-    <main class="grow p-8 md:p-12 max-w-[1600px] w-full mx-auto bg-[#fafafa]">
+    <main class="grow p-8 md:p-12 max-w-400 w-full mx-auto bg-[#fafafa]">
       <router-outlet></router-outlet>
     </main>
 
