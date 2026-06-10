@@ -63,10 +63,13 @@ export const routes: Routes = [
         path: 'inventory',
         loadComponent: () => import('./components/admin/inventory/inventory').then((m) => m.Inventory),
       },
+      {
+  path: 'customers', 
+  loadComponent: () => import('./components/admin/customers/customers').then((m) => m.Customers),
+},
     ],
   },
 
-  // Catch-all Wildcard fallback route loop
   {
     path: '**',
     redirectTo: '404',
