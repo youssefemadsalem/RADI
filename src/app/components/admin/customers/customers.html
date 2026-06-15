@@ -12,7 +12,7 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     @for (stat of customerStats(); track stat.title) {
-      <div class="bg-white border border-neutral-100 p-6 flex flex-col justify-between shadow-sm min-h-[130px]">
+      <div class="bg-white border border-neutral-100 p-6 flex flex-col justify-between shadow-sm min-h-32.5">
         <div class="flex items-start justify-between">
           <span class="text-[9px] uppercase tracking-[0.2em] font-semibold text-neutral-400 font-mono">{{ stat.title }}</span>
           <svg [lucideIcon]="stat.icon" class="w-3.5 h-3.5 text-neutral-300 stroke-[1.5]"></svg>

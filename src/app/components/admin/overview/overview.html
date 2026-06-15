@@ -7,7 +7,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     @for (item of metrics(); track item.title) {
-      <div class="bg-white border border-neutral-100 p-8 flex flex-col justify-between shadow-sm min-h-[160px]">
+      <div class="bg-white border border-neutral-100 p-8 flex flex-col justify-between shadow-sm min-h-40">
         <div class="flex items-start justify-between">
           <span class="text-[10px] uppercase tracking-[0.2em] font-semibold text-neutral-400 font-mono">{{ item.title }}</span>
           <svg [lucideIcon]="item.icon" class="w-4 h-4 text-neutral-300 stroke-[1.5]"></svg>
