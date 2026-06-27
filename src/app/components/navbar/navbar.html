@@ -1,3 +1,4 @@
+<!-- High-fidelity minimal layout context logout notification alert block -->
 @if (logoutToastMessage()) {
   <div class="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] animate-fade-in pointer-events-none">
     <div class="bg-neutral-950 text-white border border-neutral-800 px-6 py-3.5 text-center uppercase tracking-[0.25em] font-mono text-[10px] shadow-2xl flex items-center space-x-3.5 min-w-[240px]">
@@ -26,6 +27,17 @@
     </div>
 
     <div class="flex items-center space-x-6 text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-400">
+
+      <!-- 🌟 NEW: Editorial Link to Admin Portal for your specific account -->
+      @if (isMasterAdmin()) {
+        <a 
+          routerLink="/admin" 
+          [class.pointer-events-none]="logoutToastMessage()"
+          class="text-neutral-200 hover:text-white border border-neutral-800 hover:border-neutral-400 px-3 py-1.5 font-mono tracking-widest text-[9px] transition-all duration-300"
+        >
+          ADMIN PORTAL
+        </a>
+      }
 
       <button
         type="button"

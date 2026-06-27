@@ -18,25 +18,22 @@ export class Navbar {
   private router = inject(Router);
 
   readonly shoppingBag = LucideShoppingBag;
-
-  // Dynamic toast banner controller state
   logoutToastMessage = signal<string | null>(null);
 
   public totalItemsCount = computed(() => this.cart.cartCount());
 
+  public isMasterAdmin = computed(() => {
+    const user = this.authService.currentUser();
+    return user?.email === 'youssefemadeldin22@gmail.com';
+  });
+
   handleUserLogout(): void {
     if (this.logoutToastMessage()) return;
 
-    // 1. Trigger the visual toast banner feedback
     this.logoutToastMessage.set('logging you out...');
-
-    // 2. Shut down open drawers to avoid viewport overlap bugs
     this.cart.closeCart();
-
-    // 3. Clear auth state tokens safely
     this.authService.logout();
 
-    // 4. Smooth execution window delay before path switch
     setTimeout(() => {
       this.logoutToastMessage.set(null);
       this.router.navigate(['/auth']);

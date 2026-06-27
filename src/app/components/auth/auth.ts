@@ -41,7 +41,7 @@ export class Auth {
       case 'LOGIN':
         this.authService.login({ email: this.email(), password: this.password() }).subscribe({
           next: (res) => {
-            if (res.user.role === 'admin') this.router.navigate(['/admin']);
+            if (res.user.role === 'admin') this.router.navigate(['/shop']);
             else this.router.navigate(['/shop']);
           },
           error: (err) => {

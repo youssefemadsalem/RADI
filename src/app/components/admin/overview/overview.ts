@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DashboardService } from '../../../core/service/'; // Adjust your relative path here
 import { 
   LucideDynamicIcon, 
   LucideDollarSign, 
@@ -15,25 +16,57 @@ import {
   imports: [CommonModule, LucideDynamicIcon],
   templateUrl: './overview.html'
 })
-export class Overview {
-  // Lucide Icons
+export class Overview implements OnInit {
+  private dashboardService = inject(DashboardService);
+
+  // Structural Branding Icon Templates
   readonly revenueIcon = LucideDollarSign;
   readonly ordersIcon = LucideShoppingBag;
   readonly customersIcon = LucideUsers;
   readonly trendIcon = LucideTrendingUp;
   readonly arrowRight = LucideArrowRight;
 
-  // Mock Analytical Matrix Data matching your high-fidelity screenshot
-  metrics = signal([
-    { title: 'Total Revenue', value: '$284,902.00', change: '+12.5%', context: 'vs last month', icon: this.revenueIcon },
-    { title: 'Total Orders', value: '1,204', change: '+5.2%', context: 'fulfillment rate', icon: this.ordersIcon },
-    { title: 'New Customers', value: '482', change: '+24.0%', context: 'organic growth', icon: this.customersIcon }
-  ]);
+  // Modern UI Signals
+  metrics = signal<any[]>([]);
+  recentOrders = signal<any[]>([]);
 
-  recentOrders = signal([
-    { id: '#RD-9021', date: 'Oct 24, 2026', customer: 'Julianne Moore', amount: '$1,240.00', status: 'SHIPPED', statusClass: 'bg-black text-white' },
-    { id: '#RD-9022', date: 'Oct 24, 2026', customer: 'Marcus Aurelius', amount: '$890.00', status: 'PROCESSING', statusClass: 'border border-black text-black' },
-    { id: '#RD-9023', date: 'Oct 23, 2026', customer: 'Sienna Miller', amount: '$2,400.00', status: 'DELIVERED', statusClass: 'bg-neutral-100 text-neutral-400' },
-    { id: '#RD-9024', date: 'Oct 23, 2026', customer: 'Tom Hardy', amount: '$450.00', status: 'SHIPPED', statusClass: 'bg-black text-white' }
-  ]);
+  ngOnInit(): void {
+    this.loadDashboardAnalytics();
+  }
+
+  private loadDashboardAnalytics(): void {
+    this.dashboardService.getOverviewMetrics().subscribe({
+      next: (response) => {
+        // Hydrate visual matrices using actual backend trends calculations
+        this.metrics.set([
+          { 
+            title: 'Total Revenue', 
+            value: response.metrics.revenue, 
+            change: response.metrics.revenueChange, 
+            context: 'vs last 30 days', 
+            icon: this.revenueIcon 
+          },
+          { 
+            title: 'Total Orders', 
+            value: response.metrics.orders, 
+            change: response.metrics.ordersChange, 
+            context: 'fulfillment rate', 
+            icon: this.ordersIcon 
+          },
+          { 
+            title: 'New Customers', 
+            value: response.metrics.customers, 
+            change: response.metrics.customersChange, 
+            context: 'organic signups', 
+            icon: this.customersIcon 
+          }
+        ]);
+
+        this.recentOrders.set(response.recentOrders);
+      },
+      error: (err) => {
+        console.error('Data pipeline decoupling error:', err);
+      }
+    });
+  }
 }
