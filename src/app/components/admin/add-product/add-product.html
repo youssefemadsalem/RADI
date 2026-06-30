@@ -1,0 +1,175 @@
+<div class="p-8 max-w-[1400px] mx-auto bg-white min-h-screen">
+  <div class="flex justify-between items-baseline mb-12 border-b border-neutral-100 pb-6">
+    <div>
+      <h1 class="text-4xl font-serif font-semibold tracking-tight text-neutral-900 mb-1">Add New Product</h1>
+      <p class="text-sm text-neutral-500 font-sans">Editorial Admin Panel &mdash; Product Ingestion</p>
+    </div>
+    <div class="flex gap-4">
+      <button 
+        (click)="onSaveDraft()"
+        class="border border-neutral-200 text-neutral-800 px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-50 transition-colors">
+        Save Draft
+      </button>
+      <button 
+        (click)="onSubmitProduct()"
+        class="bg-black text-white px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+        Publish Product
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    
+    <div class="lg:col-span-2 space-y-10">
+      
+      <div>
+        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 mb-6 font-semibold">Product Details</h2>
+        <div class="space-y-6">
+          <div>
+            <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Product Name *</label>
+            <input 
+              [(ngModel)]="name" 
+              type="text" 
+              placeholder="e.g. MONOLITH OVERCOAT" 
+              class="w-full border-b border-neutral-200 py-2 text-lg font-serif tracking-wide focus:outline-none focus:border-black transition-colors" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            <div>
+              <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Category</label>
+              <select [(ngModel)]="productType" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
+                <option value="Apparel">Apparel</option>
+                <option value="Carry">Carry</option>
+                <option value="Tableware">Tableware</option>
+                <option value="Outerwear">Outerwear</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Collection Tag</label>
+              <select [(ngModel)]="categoryTag" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
+                <option value="none">FW24 ARCHIVE</option>
+                <option value="new arrivals">New Arrivals</option>
+                <option value="best sellers">Best Sellers</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Editorial Description</label>
+            <textarea 
+              [(ngModel)]="description" 
+              rows="4" 
+              placeholder="Describe the silhouette, fabric narrative, and craftsmanship details..." 
+              class="w-full border border-neutral-100 p-4 text-sm font-sans text-neutral-600 bg-neutral-50/30 focus:outline-none focus:border-neutral-300 transition-colors resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 mb-6 font-semibold">Media Assets</h2>
+        
+        <div 
+          (click)="fileInput.click()"
+          class="border border-dashed border-neutral-200 bg-neutral-50/50 p-12 text-center rounded-sm cursor-pointer hover:bg-neutral-50 transition-colors group mb-6">
+          <input 
+            #fileInput 
+            type="file" 
+            (change)="onFilesSelected($event)" 
+            multiple 
+            accept="image/*" 
+            class="hidden" />
+          <svg class="w-8 h-8 text-neutral-300 mx-auto mb-3 group-hover:text-neutral-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <span class="block text-[10px] font-sans uppercase tracking-widest text-neutral-500 mb-1">Drag and drop high-resolution imagery</span>
+          <span class="block text-[9px] font-sans text-neutral-400">TIFF, JPG OR PNG &bull; MIN 3000PX WIDTH</span>
+        </div>
+
+        <div class="grid grid-cols-5 gap-4">
+          @for (slot of [0, 1, 2, 3, 4]; track slot) {
+            <div class="aspect-[3/4] bg-neutral-50 border border-neutral-100 flex items-center justify-center relative group overflow-hidden rounded-sm">
+              @if (previewImageUrls()[slot]) {
+                <img [src]="previewImageUrls()[slot]" class="w-full h-full object-cover" />
+                <button 
+                  (click)="removeImageSlot(slot); $event.stopPropagation()" 
+                  class="absolute top-1 right-1 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-[8px]">
+                  &times;
+                </button>
+              } @else {
+                <span class="text-neutral-300 font-light text-xl pointer-events-none">+</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-10 border-l border-neutral-100 lg:pl-12">
+      
+      <div class="border border-neutral-100 bg-neutral-50/30 p-6 space-y-6">
+        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 font-semibold">Logistics</h2>
+        
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Retail Price (E£) *</label>
+          <div class="flex items-baseline border-b border-neutral-200 focus-within:border-black transition-colors">
+            <span class="text-neutral-400 font-sans mr-2">E£</span>
+            <input [(ngModel)]="price" type="number" class="w-full py-2 bg-transparent focus:outline-none" placeholder="0.00" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Initial Inventory *</label>
+          <input [(ngModel)]="initialInventory" type="number" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="24" />
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">SKU / Reference Code *</label>
+          <input [(ngModel)]="sku" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors placeholder:text-neutral-200" placeholder="RD-FW24-OUT-001" />
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 font-semibold">Attributes</h2>
+        
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Primary Color Palette</label>
+          <div class="flex flex-wrap gap-2">
+            @for (color of selectedColors(); track color) {
+              <div [style.backgroundColor]="color" class="w-8 h-8 border border-neutral-200/60 rounded-sm cursor-pointer shadow-sm"></div>
+            }
+            <div class="w-8 h-8 border border-dashed border-neutral-300 flex items-center justify-center text-xs text-neutral-400 rounded-sm hover:border-black cursor-pointer">+</div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Material Composition</label>
+          <div class="flex flex-wrap gap-2">
+            @for (material of selectedMaterials(); track material) {
+              <span class="inline-flex items-center gap-2 bg-neutral-50 text-neutral-700 text-[10px] font-sans uppercase tracking-wider px-3 py-1.5 border border-neutral-100">
+                {{ material }}
+                <button class="text-neutral-400 hover:text-black">&times;</button>
+              </span>
+            }
+            <span class="inline-flex items-center bg-transparent text-neutral-400 border border-dashed border-neutral-300 text-[10px] font-sans uppercase tracking-wider px-3 py-1.5 cursor-pointer hover:border-black hover:text-black">+ Add Material</span>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-neutral-100 flex items-center justify-between">
+          <div>
+            <span class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 font-semibold">Marketplace Status</span>
+            <span class="text-xs font-sans text-neutral-500">Publicly Visible</span>
+          </div>
+          <button 
+            (click)="toggleVisibility()"
+            [ngClass]="isPubliclyVisible() ? 'bg-black' : 'bg-neutral-200'"
+            class="w-11 h-6 rounded-full p-1 transition-colors duration-200 focus:outline-none">
+            <div 
+              [ngClass]="isPubliclyVisible() ? 'translate-x-5' : 'translate-x-0'"
+              class="bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200"></div>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -216,7 +216,8 @@
           <div class="flex items-center justify-between text-xs tracking-wide">
             <div class="flex items-center space-x-4">
               <div class="w-16 h-20 bg-white border border-neutral-200 rounded overflow-hidden relative shrink-0">
-                @if (item.image) { <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover" /> }
+                @if (item.image) { <img [src]="item.image.startsWith('http') ? item.image : 'http://localhost:5000/' + item.image" 
+  [alt]="item.name" class="w-full h-full object-cover" /> }
                 <span class="absolute -top-1.5 -right-1.5 bg-neutral-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-sm">{{ item.quantity }}</span>
               </div>
               <div>

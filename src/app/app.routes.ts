@@ -5,10 +5,10 @@ import { authGuard } from './core/guards/auth-guard'; // 🌟 IMPORTED: Fresh Cl
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'shop', 
+    redirectTo: 'shop',
     pathMatch: 'full',
   },
-  
+
   // 🚪 1. STANDALONE UNPROTECTED AUTH ROUTE (No Navbar, No Footer)
   {
     path: 'auth',
@@ -19,7 +19,8 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [authGuard], // 🌟 FIXED: Secures your entire user-facing layout tree from structural leaks
-    loadComponent: () => import('./components/layouts/main-layout/main-layout').then((m) => m.MainLayout),
+    loadComponent: () =>
+      import('./components/layouts/main-layout/main-layout').then((m) => m.MainLayout),
     children: [
       {
         path: 'shop',
@@ -27,7 +28,8 @@ export const routes: Routes = [
       },
       {
         path: 'product/:id',
-        loadComponent: () => import('./components/product-details/product-details').then((m) => m.ProductDetails),
+        loadComponent: () =>
+          import('./components/product-details/product-details').then((m) => m.ProductDetails),
       },
       {
         path: 'checkout',
@@ -35,13 +37,14 @@ export const routes: Routes = [
       },
       {
         path: 'order-complete',
-        loadComponent: () => import('./components/order-complete/order-complete').then((m) => m.OrderComplete),
+        loadComponent: () =>
+          import('./components/order-complete/order-complete').then((m) => m.OrderComplete),
       },
       {
         path: '404',
         loadComponent: () => import('./components/not-found/not-found').then((m) => m.NotFound),
-      }
-    ]
+      },
+    ],
   },
 
   // ⚙️ 3. STANDALONE ADMINISTRATIVE BACKOFFICE PANEL ARCHITECTURE
@@ -61,18 +64,26 @@ export const routes: Routes = [
       },
       {
         path: 'inventory',
-        loadComponent: () => import('./components/admin/inventory/inventory').then((m) => m.Inventory),
+        loadComponent: () =>
+          import('./components/admin/inventory/inventory').then((m) => m.Inventory),
+      },
+
+      {
+        path: 'inventory/add-product',
+        loadComponent: () =>
+          import('./components/admin/add-product/add-product').then((m) => m.AddProduct),
       },
       {
-  path: 'customers', 
-  loadComponent: () => import('./components/admin/customers/customers').then((m) => m.Customers),
-},
+        path: 'customers',
+        loadComponent: () =>
+          import('./components/admin/customers/customers').then((m) => m.Customers),
+      },
     ],
   },
 
   {
     path: '**',
     redirectTo: '404',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 ];

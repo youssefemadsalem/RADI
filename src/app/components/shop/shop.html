@@ -62,7 +62,7 @@
                 <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                   @if (product.images && product.images.length > 0) {
                     <img
-                      [src]="product.images[0]"
+                      [src]="product.images[0].startsWith('http') ? product.images[0] : 'http://localhost:5000/' + product.images[0]"
                       [alt]="product.name"
                       class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                     />
@@ -102,8 +102,7 @@
           <h4 class="text-[11px] uppercase tracking-[0.3em] font-bold text-neutral-800">
             02 / Best Sellers
           </h4>
-                    <span class="text-[12px] tracking-widest text-neutral-600 font-mono">Drag or Swipe →</span>
-
+          <span class="text-[12px] tracking-widest text-neutral-600 font-mono">Drag or Swipe →</span>
         </div>
 
         <swiper-container
@@ -120,7 +119,7 @@
                 <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                   @if (product.images && product.images.length > 0) {
                     <img
-                      [src]="product.images[0]"
+                      [src]="product.images[0].startsWith('http') ? product.images[0] : 'http://localhost:5000/' + product.images[0]"
                       [alt]="product.name"
                       class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                     />
@@ -177,7 +176,7 @@
                 <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
                   @if (product.images && product.images.length > 0) {
                     <img
-                      [src]="product.images[0]"
+                      [src]="product.images[0].startsWith('http') ? product.images[0] : 'http://localhost:5000/' + product.images[0]"
                       [alt]="product.name"
                       class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-104"
                     />

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../../core/service/'; // Adjust your relative path here
+import { DashboardService } from '../../../core/service/dashboard.service'; // Adjust your relative path here
 import { 
   LucideDynamicIcon, 
   LucideDollarSign, 

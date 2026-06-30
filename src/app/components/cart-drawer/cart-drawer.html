@@ -34,7 +34,7 @@
         <div class="flex py-6 first:pt-2 group">
           
           <div class="w-20 aspect-3/4 bg-neutral-50 overflow-hidden border border-neutral-100 shrink-0 relative">
-            <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
+            <img [src]="item.image.startsWith('http') ? item.image : 'http://localhost:5000/' + item.image" [alt]="item.name" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
           </div>
 
           <div class="grow pl-6 flex flex-col justify-between">
