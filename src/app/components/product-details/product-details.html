@@ -22,52 +22,40 @@
           {{ prod.description || 'Sophisticated layout engineered with pure geometric accuracy and custom architectural detailing.' }}
         </p>
 
-        @if (prod.colors?.length) {
-          <div class="space-y-3">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block">Color Variant</span>
-            <div class="flex items-center space-x-3">
-              @for (color of prod.colors; track color) {
-                <button 
-                  (click)="selectedColor.set(color)"
-                  [style.backgroundColor]="color"
-                  class="w-6 h-6 rounded-full border transition-all duration-200"
-                  [class.border-black]="selectedColor() === color"
-                  [class.scale-110]="selectedColor() === color"
-                  [class.ring-1]="selectedColor() === color"
-                  [class.ring-black]="selectedColor() === color"
-                  [class.ring-offset-2]="selectedColor() === color"
-                ></button>
-              }
+        <div class="border-t border-b border-neutral-100 py-6 space-y-4 max-w-md">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-1">Form Blueprints</span>
+          
+          <div class="grid grid-cols-3 gap-4 text-xs">
+            <div>
+              <span class="text-[9px] uppercase tracking-wider text-neutral-400 block font-mono">Height</span>
+              <span class="font-medium text-neutral-800 tracking-wide block mt-1">{{ prod.height || '24 cm' }}</span>
+            </div>
+            
+            <div>
+              <span class="text-[9px] uppercase tracking-wider text-neutral-400 block font-mono">Width</span>
+              <span class="font-medium text-neutral-800 tracking-wide block mt-1">{{ prod.width || '32 cm' }}</span>
+            </div>
+            
+            <div>
+              <span class="text-[9px] uppercase tracking-wider text-neutral-400 block font-mono">Composition</span>
+              <span class="font-medium text-neutral-800 tracking-wide block mt-1 capitalize truncate">
+                {{ prod.materials?.[0] || 'Premium Form' }}
+              </span>
             </div>
           </div>
-        }
-
-        @if (prod.sizes?.length && prod.sizes[0] !== 'OS') {
-          <div class="space-y-3">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block">Select Size</span>
-            <div class="flex items-center space-x-2">
-              @for (size of prod.sizes; track size) {
-                <button 
-                  type="button"
-                  (click)="selectedSize.set(size)"
-                  class="px-3 py-1.5 border text-[10px] font-mono tracking-wider transition-all duration-200"
-                  [class.border-black]="selectedSize() === size"
-                  [class.bg-black]="selectedSize() === size"
-                  [class.text-white]="selectedSize() === size"
-                  [class.border-neutral-200]="selectedSize() !== size"
-                >
-                  {{ size }}
-                </button>
-              }
-            </div>
-          </div>
-        }
+        </div>
 
         <button 
+          [disabled]="prod.currentInventory <= 0"
           (click)="onAddToBag()"
-          class="w-full py-4 bg-black hover:bg-neutral-900 text-white font-medium tracking-[0.25em] text-[10px] uppercase transition-colors"
+          class="w-full py-4 font-medium tracking-[0.25em] text-[10px] uppercase transition-colors"
+          [ngClass]="prod.currentInventory <= 0 ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed border border-neutral-200' : 'bg-black hover:bg-neutral-900 text-white'"
         >
-          Add To Bag — E£{{ prod.price }}.00
+          @if (prod.currentInventory > 0) {
+            Add To Bag — E£{{ prod.price }}.00
+          } @else {
+            Sold Out
+          }
         </button>
       </div>
     </div>
@@ -86,29 +74,111 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          @for (outfit of prod.outfits; track outfit.period) {
-            <div class="relative aspect-[3/4] bg-neutral-900 overflow-hidden group shadow-sm transition-transform duration-500 hover:-translate-y-1">
-              <img 
-              [src]="outfit.imageUrl?.startsWith('http') ? outfit.imageUrl : 'http://localhost:5000/' + outfit.imageUrl" 
-  [alt]="outfit.period"
-                class="w-full h-full object-cover opacity-90 transition-transform duration-700 scale-100 group-hover:scale-105" 
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
-              
-              <div class="absolute bottom-6 left-6 text-white space-y-1">
-                <span class="font-mono text-[9px] text-neutral-400 tracking-widest block uppercase">{{ outfit.time }}</span>
-                <h4 class="font-serif text-xl tracking-wide text-neutral-100 font-medium capitalize">{{ outfit.period }}</h4>
-              </div>
+          
+          <div class="relative aspect-[3/4] bg-neutral-900 overflow-hidden group shadow-sm transition-transform duration-500 hover:-translate-y-1">
+            <img 
+              [src]="prod.images?.[2] ? (prod.images[2].startsWith('http') ? prod.images[2] : 'http://localhost:5000/' + prod.images[2]) : 'http://localhost:5000/' + prod.images?.[0]" 
+              alt="Morning silhouette context profile"
+              class="w-full h-full object-cover opacity-90 transition-transform duration-700 scale-100 group-hover:scale-105" 
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 text-white space-y-1">
+              <span class="font-mono text-[9px] text-neutral-400 tracking-widest block uppercase">08:00 AM — Morning</span>
+              <h4 class="font-serif text-xl tracking-wide text-neutral-100 font-medium capitalize">Minimalist Professional</h4>
             </div>
-          } @empty {
-            <div class="col-span-3 text-center py-12 text-neutral-400 font-mono text-xs tracking-wider">
-              No specialized styling data mapped to this silhouette profile yet.
-            </div>
-          }
-        </div>
+          </div>
 
+          <div class="relative aspect-[3/4] bg-neutral-900 overflow-hidden group shadow-sm transition-transform duration-500 hover:-translate-y-1">
+            <img 
+              [src]="prod.images?.[3] ? (prod.images[3].startsWith('http') ? prod.images[3] : 'http://localhost:5000/' + prod.images[3]) : 'http://localhost:5000/' + prod.images?.[0]" 
+              alt="Afternoon silhouette context profile"
+              class="w-full h-full object-cover opacity-90 transition-transform duration-700 scale-100 group-hover:scale-105" 
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 text-white space-y-1">
+              <span class="font-mono text-[9px] text-neutral-400 tracking-widest block uppercase">03:00 PM — Afternoon</span>
+              <h4 class="font-serif text-xl tracking-wide text-neutral-100 font-medium capitalize">Transit Ensemble</h4>
+            </div>
+          </div>
+
+          <div class="relative aspect-[3/4] bg-neutral-900 overflow-hidden group shadow-sm transition-transform duration-500 hover:-translate-y-1">
+            <img 
+              [src]="prod.images?.[4] ? (prod.images[4].startsWith('http') ? prod.images[4] : 'http://localhost:5000/' + prod.images[4]) : 'http://localhost:5000/' + (prod.images?.[1] || prod.images?.[0])" 
+              alt="Evening silhouette context profile"
+              class="w-full h-full object-cover opacity-90 transition-transform duration-700 scale-100 group-hover:scale-105" 
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 text-white space-y-1">
+              <span class="font-mono text-[9px] text-neutral-400 tracking-widest block uppercase">08:00 PM — Evening</span>
+              <h4 class="font-serif text-xl tracking-wide text-neutral-100 font-medium capitalize">After Hours Form</h4>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
+
+    @if (recommendedProducts().length > 0) {
+      <div class="border-t border-neutral-100 bg-white pt-20 pb-28">
+        <div class="max-w-7xl mx-auto px-6">
+          
+          <div class="flex justify-between items-baseline mb-12 border-b border-neutral-100 pb-6">
+            <div>
+              <h2 class="font-serif text-3xl tracking-tight text-neutral-950">Recommended Forms</h2>
+              <p class="text-[9px] font-mono text-neutral-400 uppercase tracking-[0.25em] mt-2">Complementary Structural Items</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @for (rec of recommendedProducts(); track rec._id) {
+              <div [routerLink]="['/product', rec._id]" class="group/card cursor-pointer flex flex-col">
+                
+                <div class="bg-neutral-100 overflow-hidden aspect-3/4 relative mb-4 transition-all duration-500 group-hover/card:shadow-sm border border-neutral-200/50">
+                  <div class="glare-effect absolute inset-0 w-full h-full"></div>
+
+                  @if (rec.images && rec.images.length > 0) {
+                    <img
+                      [src]="rec.images[0].startsWith('http') ? rec.images[0] : 'http://localhost:5000/' + rec.images[0]"
+                      [alt]="rec.name"
+                      class="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out group-hover/card:opacity-0 group-hover/card:scale-105 z-0"
+                    />
+                    
+                    @if (rec.images.length > 1) {
+                      <img
+                        [src]="rec.images[1].startsWith('http') ? rec.images[1] : 'http://localhost:5000/' + rec.images[1]"
+                        [alt]="rec.name + ' alternate view'"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:opacity-100 group-hover/card:scale-105 z-0"
+                      />
+                    }
+                  } @else {
+                    <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400 absolute inset-0">
+                      [ Visual Img Placeholder ]
+                    </div>
+                  }
+
+                  <div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 bg-black/90 backdrop-blur-sm text-center z-20 select-none">
+                    <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-white">View Details</span>
+                  </div>
+                </div>
+
+                <div class="flex justify-between items-start text-xs tracking-wide px-1">
+                  <div>
+                    <h5 class="font-medium text-neutral-800 uppercase text-[11px] tracking-wider">
+                      {{ rec.name }}
+                    </h5>
+                    <p class="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">
+                      {{ rec.materials?.[0] || 'Fabric Form' }}
+                    </p>
+                  </div>
+                  <span class="font-mono text-neutral-600">E£{{ rec.price }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+        </div>
+      </div>
+    }
 
   </div>
 } @else if (isLoading()) {

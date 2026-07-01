@@ -1,10 +1,10 @@
-// checkout.ts
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Cart } from '../../core/service/cart';
 import { Checkout as CheckoutService } from '../../core/service/checkout'; 
+import { Tag, X } from 'lucide-angular'; // Add icons if you use them
 
 @Component({
   selector: 'app-checkout',
@@ -24,6 +24,12 @@ export class Checkout implements OnInit {
   screenshotPreview = signal<string | null>(null);
   isSubmitting = signal<boolean>(false);
   shippingCost = 100;
+
+  
+  couponInput = '';
+  appliedCoupon = signal<string | null>(null);
+  discountAmount = signal<number>(0);
+  couponError = signal<string | null>(null);
 
   ngOnInit(): void {
     this.initCheckoutForm();
@@ -58,7 +64,33 @@ export class Checkout implements OnInit {
   }
 
   get finalTotal(): number {
-    return this.cartService.subtotal() + this.shippingCost;
+    const total = this.cartService.subtotal() - this.discountAmount() + this.shippingCost;
+    return Math.max(0, total); // Prevents negative totals
+  }
+
+  applyCoupon(): void {
+    const code = this.couponInput.trim().toUpperCase();
+    this.couponError.set(null);
+
+    if (!code) return;
+
+    if (code === 'RADI10') {
+      const discount = this.cartService.subtotal() * 0.10; // 10% off
+      this.appliedCoupon.set(code);
+      this.discountAmount.set(discount);
+      this.couponInput = ''; // clear input
+    } else if (code === 'FREESHIP') {
+      this.appliedCoupon.set(code);
+      this.discountAmount.set(this.shippingCost);
+      this.couponInput = '';
+    } else {
+      this.couponError.set('Enter a valid discount code');
+    }
+  }
+
+  removeCoupon(): void {
+    this.appliedCoupon.set(null);
+    this.discountAmount.set(0);
   }
 
   onFileSelected(event: Event): void {
@@ -95,8 +127,14 @@ export class Checkout implements OnInit {
 
     this.isSubmitting.set(true);
 
+    const orderPayload = {
+      ...this.checkoutForm.value,
+      couponCode: this.appliedCoupon(),
+      discountAmount: this.discountAmount()
+    };
+
     this.checkoutService.placeOrder(
-      this.checkoutForm.value,
+      orderPayload, 
       this.cartService.items(),
       this.cartService.subtotal(),
       this.shippingCost,
@@ -104,12 +142,9 @@ export class Checkout implements OnInit {
       this.screenshotFile
     ).subscribe({
       next: (response) => {
-        // 1. Flush out all items from your client-side reactive state store container
         this.cartService.items.set([]); 
         this.isSubmitting.set(false);
         
-        // 🌟 2. FIXED: Route straight to your clean /order-complete view 
-        // We pass your real backend database tracking ref ('orderCode' or 'code') through state or queryParams
         this.router.navigate(['/order-complete'], { 
           queryParams: { ref: response.orderCode || response.code || 'RAD-SUCCESS' } 
         });

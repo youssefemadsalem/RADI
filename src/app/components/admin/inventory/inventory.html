@@ -67,8 +67,10 @@
               E£{{ product.price | number:'1.2-2' }}
             </td>
 
-            <td class="py-5 font-sans text-neutral-600 text-center">{{ product.stock }}</td>
-
+<td class="py-5 font-sans text-center"
+    [ngClass]="{'text-rose-600 font-semibold animate-pulse': product.stock === 0, 'text-neutral-600': product.stock > 0}">
+  {{ product.stock }}
+</td>
             <td class="py-5 text-right">
               <span class="inline-block px-2.5 py-1 text-[10px] font-sans uppercase tracking-wider font-medium rounded-sm"
                 [ngClass]="{

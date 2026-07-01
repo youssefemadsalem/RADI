@@ -6,11 +6,6 @@
     </div>
     <div class="flex gap-4">
       <button 
-        (click)="onSaveDraft()"
-        class="border border-neutral-200 text-neutral-800 px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-50 transition-colors">
-        Save Draft
-      </button>
-      <button 
         (click)="onSubmitProduct()"
         class="bg-black text-white px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-800 transition-colors">
         Publish Product
@@ -129,31 +124,6 @@
       </div>
 
       <div class="space-y-6">
-        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 font-semibold">Attributes</h2>
-        
-        <div>
-          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Primary Color Palette</label>
-          <div class="flex flex-wrap gap-2">
-            @for (color of selectedColors(); track color) {
-              <div [style.backgroundColor]="color" class="w-8 h-8 border border-neutral-200/60 rounded-sm cursor-pointer shadow-sm"></div>
-            }
-            <div class="w-8 h-8 border border-dashed border-neutral-300 flex items-center justify-center text-xs text-neutral-400 rounded-sm hover:border-black cursor-pointer">+</div>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Material Composition</label>
-          <div class="flex flex-wrap gap-2">
-            @for (material of selectedMaterials(); track material) {
-              <span class="inline-flex items-center gap-2 bg-neutral-50 text-neutral-700 text-[10px] font-sans uppercase tracking-wider px-3 py-1.5 border border-neutral-100">
-                {{ material }}
-                <button class="text-neutral-400 hover:text-black">&times;</button>
-              </span>
-            }
-            <span class="inline-flex items-center bg-transparent text-neutral-400 border border-dashed border-neutral-300 text-[10px] font-sans uppercase tracking-wider px-3 py-1.5 cursor-pointer hover:border-black hover:text-black">+ Add Material</span>
-          </div>
-        </div>
-
         <div class="pt-4 border-t border-neutral-100 flex items-center justify-between">
           <div>
             <span class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 font-semibold">Marketplace Status</span>
