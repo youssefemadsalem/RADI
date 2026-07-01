@@ -15,7 +15,6 @@ export class AddProduct {
   private inventoryService = inject(InventoryService);
   private router = inject(Router);
 
-  // Form Fields Primitives State Bindings
   name = signal<string>('');
   description = signal<string>('');
   price = signal<number | null>(null);
@@ -25,12 +24,11 @@ export class AddProduct {
   categoryTag = signal<string>('none');
   isPubliclyVisible = signal<boolean>(false);
 
-  // Luxury Editorial Attribute Arrays Defaults
-  selectedColors = signal<string[]>(['#000000', '#FFFFFF', '#333333', '#E5E0D8']);
-  selectedMaterials = signal<string[]>(['VIRGIN WOOL', 'CASHMERE BLEND', 'SILK LINING']);
-  selectedSizes = signal<string[]>(['S', 'M', 'L', 'XL']);
+  // i removed colors and sizes and added the dimension tracking signals
+  height = signal<string>('');
+  width = signal<string>('');
+  materials = signal<string>('');
 
-  // Native Binary Buffers alongside Base64 representation vectors
   uploadedFiles = signal<File[]>([]);
   previewImageUrls = signal<string[]>([]);
 
@@ -39,7 +37,7 @@ export class AddProduct {
     if (!files) return;
 
     for (let i = 0; i < files.length; i++) {
-      if (this.uploadedFiles().length >= 5) break; // Capped out at max template slots available
+      if (this.uploadedFiles().length >= 5) break; 
       
       const file = files.item(i);
       if (file) {
@@ -63,10 +61,6 @@ export class AddProduct {
     this.isPubliclyVisible.update(val => !val);
   }
 
-  onSaveDraft(): void {
-    console.log('Draft structural serialization cached local cache block context');
-  }
-
   onSubmitProduct(): void {
     if (!this.name() || !this.sku() || !this.price() || !this.initialInventory()) {
       alert('Validation constraint mapping incomplete. Please populate required fields.');
@@ -83,12 +77,11 @@ export class AddProduct {
     formData.append('categoryTag', this.categoryTag());
     formData.append('isPubliclyVisible', String(this.isPubliclyVisible()));
 
-    // Marshal structural array lists cleanly over the multipart boundaries
-    formData.append('materials', JSON.stringify(this.selectedMaterials()));
-    formData.append('colors', JSON.stringify(this.selectedColors()));
-    formData.append('sizes', JSON.stringify(this.selectedSizes()));
+    // i am appending the new structural dimension fields here
+    formData.append('height', this.height());
+    formData.append('width', this.width());
+    formData.append('materials', this.materials()); // the backend splits this string by commas
 
-    // Append standard file blobs explicitly maps directly to req.files array
     this.uploadedFiles().forEach((file) => {
       formData.append('images', file, file.name);
     });
@@ -96,7 +89,7 @@ export class AddProduct {
     this.inventoryService.createNewProduct(formData).subscribe({
       next: (res) => {
         if (res.success) {
-          this.router.navigate(['/inventory']);
+          this.router.navigate(['/admin/inventory']);
         }
       },
       error: (err) => {

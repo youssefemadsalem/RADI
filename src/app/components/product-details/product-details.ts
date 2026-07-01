@@ -16,16 +16,16 @@ export class ProductDetails implements OnInit {
   private productService = inject(ProductService);
   private cartService = inject(Cart); 
 
+  // Core Presentation Signals
   public product = signal<any | null>(null);
-  public selectedColor = signal<string>('');
-  public selectedSize = signal<string>('');
   public isLoading = signal<boolean>(true);
-  
-  // adding a new signal to hold the 3 recommended products
   public recommendedProducts = signal<any[]>([]);
 
+  // Creative Carousel State Node
+  public currentImageIndex = signal<number>(0);
+
   ngOnInit(): void {
-    // this keeps listening for route changes so if they click a recommendation, the page updates automatically
+    // Listens to parameter route state streams to smoothly catch recommendation clicks
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -40,9 +40,7 @@ export class ProductDetails implements OnInit {
     this.productService.getProductById(id).subscribe({
       next: (data) => {
         this.product.set(data);
-        if (data.colors?.length) this.selectedColor.set(data.colors[0]);
-        if (data.sizes?.length) this.selectedSize.set(data.sizes[0]);
-        // scrolling to top smoothly when a new product loads
+        this.currentImageIndex.set(0); // Safely reset carousel view pane to master index
         window.scrollTo({ top: 0, behavior: 'smooth' });
         this.isLoading.set(false);
       },
@@ -53,18 +51,48 @@ export class ProductDetails implements OnInit {
     });
   }
 
-  // fetching all products and slicing out 3 for the bottom section
   private fetchRecommendations(currentProductId: string): void {
     this.productService.getProducts().subscribe({
       next: (data) => {
-        // filtering out the active product so it doesnt show up in its own recommendations
+        // Exclude the active product item profile context from its own lookbook deck
         const filtered = data.filter(p => p._id !== currentProductId).slice(0, 4);
         this.recommendedProducts.set(filtered);
       },
-      error: (err) => console.error('failed fetching recommendations', err)
+      error: (err) => console.error('[Recommendations Error] Population sequence failed:', err)
     });
   }
 
+  /**
+   * Defensive Web Asset URL Matrix Normalizer
+   * Strips local operating system absolute paths and maps them cleanly into relative assets.
+   */
+  public resolveImageUrl(imageStr: string): string {
+    if (!imageStr) return '';
+    if (imageStr.startsWith('http') || imageStr.startsWith('data:')) return imageStr;
+    
+    let cleanPath = imageStr;
+    if (imageStr.includes('uploads/')) {
+      cleanPath = 'uploads/' + imageStr.split('uploads/')[1];
+    } else if (imageStr.includes('uploads\\')) {
+      cleanPath = 'uploads/' + imageStr.split('uploads\\')[1];
+    }
+    
+    cleanPath = cleanPath.replace(/\\/g, "/");
+    return `http://localhost:5000/${cleanPath}`;
+  }
+
+  // Carousel Transformation Handlers
+  public nextImage(totalLength: number, event: Event): void {
+    event.stopPropagation();
+    this.currentImageIndex.update(i => (i + 1) % totalLength);
+  }
+
+  public prevImage(totalLength: number, event: Event): void {
+    event.stopPropagation();
+    this.currentImageIndex.update(i => (i - 1 + totalLength) % totalLength);
+  }
+
+  // Checkout Core Dispatcher
   public onAddToBag(): void {
     const currentProduct = this.product();
     if (!currentProduct) return;
@@ -73,10 +101,10 @@ export class ProductDetails implements OnInit {
       _id: currentProduct._id,
       name: currentProduct.name,
       price: currentProduct.price,
-      image: currentProduct.images?.[0] || 'assets/placeholder.jpg', 
+      image: this.resolveImageUrl(currentProduct.images?.[0] || ''), 
       quantity: 1, 
-      selectedSize: this.selectedSize() || 'OS',
-      selectedColor: this.selectedColor() || currentProduct.colors?.[0] || 'Default'
+      selectedSize: 'OS',       // Uniform blueprint standard
+      selectedColor: 'Default'  // Uniform blueprint standard
     };
 
     this.cartService.addItem(itemToAdd);

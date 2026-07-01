@@ -99,7 +99,7 @@
       </div>
     </div>
 
-    <div class="space-y-10 border-l border-neutral-100 lg:pl-12">
+    <div class="space-y-6 border-l border-neutral-100 lg:pl-12">
       
       <div class="border border-neutral-100 bg-neutral-50/30 p-6 space-y-6">
         <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 font-semibold">Logistics</h2>
@@ -123,21 +123,39 @@
         </div>
       </div>
 
-      <div class="space-y-6">
-        <div class="pt-4 border-t border-neutral-100 flex items-center justify-between">
-          <div>
-            <span class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 font-semibold">Marketplace Status</span>
-            <span class="text-xs font-sans text-neutral-500">Publicly Visible</span>
-          </div>
-          <button 
-            (click)="toggleVisibility()"
-            [ngClass]="isPubliclyVisible() ? 'bg-black' : 'bg-neutral-200'"
-            class="w-11 h-6 rounded-full p-1 transition-colors duration-200 focus:outline-none">
-            <div 
-              [ngClass]="isPubliclyVisible() ? 'translate-x-5' : 'translate-x-0'"
-              class="bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200"></div>
-          </button>
+      <div class="border border-neutral-100 bg-neutral-50/30 p-6 space-y-6">
+        <h2 class="text-xs font-sans uppercase tracking-widest text-neutral-400 font-semibold">Physical Blueprints</h2>
+        
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Height</label>
+          <input [(ngModel)]="height" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 24 cm" />
         </div>
+
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Width</label>
+          <input [(ngModel)]="width" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 32 cm" />
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Composition / Material</label>
+          <input [(ngModel)]="materials" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. Cotton, Leather" />
+          <span class="text-[9px] text-neutral-400 mt-1 block">separate multiple materials with a comma</span>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-neutral-100 flex items-center justify-between">
+        <div>
+          <span class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 font-semibold">Marketplace Status</span>
+          <span class="text-xs font-sans text-neutral-500">Publicly Visible</span>
+        </div>
+        <button 
+          (click)="toggleVisibility()"
+          [ngClass]="isPubliclyVisible() ? 'bg-black' : 'bg-neutral-200'"
+          class="w-11 h-6 rounded-full p-1 transition-colors duration-200 focus:outline-none">
+          <div 
+            [ngClass]="isPubliclyVisible() ? 'translate-x-5' : 'translate-x-0'"
+            class="bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200"></div>
+        </button>
       </div>
 
     </div>

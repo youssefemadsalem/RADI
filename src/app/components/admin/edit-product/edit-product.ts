@@ -1,3 +1,5 @@
+// inside edit-product.ts
+
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,7 +11,7 @@ import { InventoryService } from '../../../core/service/inventory.service';
   selector: 'app-edit-product',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './edit-product.html', // copy your add-product html here
+  templateUrl: './edit-product.html',
   styleUrl: './edit-product.css'
 })
 export class EditProduct implements OnInit {
@@ -25,7 +27,6 @@ export class EditProduct implements OnInit {
   isSubmitting = signal<boolean>(false);
 
   ngOnInit(): void {
-    // i built this form to hold all the standard product fields we need to update
     this.editForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
@@ -33,10 +34,13 @@ export class EditProduct implements OnInit {
       initialInventory: [0, Validators.required],
       sku: ['', Validators.required],
       productType: [''],
-      categoryTag: ['none']
+      categoryTag: ['none'],
+      // i added the new form controls here to hold the dimensions
+      height: [''],
+      width: [''],
+      materials: [''] 
     });
 
-    // i am listening to the url parameters to grab the id we passed from the inventory table
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -47,17 +51,21 @@ export class EditProduct implements OnInit {
   }
 
   loadProductData(id: string): void {
-    // i fetch the existing product data from the backend and patch it into the form so the admin can edit it
     this.productService.getProductById(id).subscribe({
       next: (product) => {
         this.editForm.patchValue({
           name: product.name,
           description: product.description,
           price: product.price,
-          initialInventory: product.currentInventory, // mapping current stock to the form input
+          initialInventory: product.currentInventory,
           sku: product.sku,
           productType: product.productType,
-          categoryTag: product.categoryTag
+          categoryTag: product.categoryTag,
+          
+          // binding the database values to the form inputs. if materials is an array, i join it with a comma for the text input
+          height: product.height || '',
+          width: product.width || '',
+          materials: product.materials ? product.materials.join(', ') : ''
         });
         this.isLoading.set(false);
       },
@@ -76,11 +84,9 @@ export class EditProduct implements OnInit {
 
     this.isSubmitting.set(true);
     
-    // i call the update service method we created earlier to save the changes
     this.inventoryService.updateProduct(this.productId, this.editForm.value).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        // routing back to the inventory list after a successful update
         this.router.navigate(['/admin/inventory']);
       },
       error: (err) => {
