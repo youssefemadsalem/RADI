@@ -1,0 +1,144 @@
+<div class="p-8 max-w-[1000px] mx-auto bg-white min-h-screen">
+  
+  <div class="mb-10">
+    <a routerLink="/admin/inventory" class="text-[10px] text-neutral-400 hover:text-black mb-6 inline-block font-sans uppercase tracking-[0.2em] transition-colors">
+      ← Back to Inventory
+    </a>
+    <h1 class="text-4xl font-serif font-semibold tracking-tight text-neutral-900 mb-2">Edit Product</h1>
+    <p class="text-sm text-neutral-500 font-sans">Modify structural parameters and inventory counts.</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="space-y-8 animate-pulse">
+      <div class="h-12 bg-neutral-100 rounded w-full"></div>
+      <div class="h-32 bg-neutral-100 rounded w-full"></div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="h-12 bg-neutral-100 rounded w-full"></div>
+        <div class="h-12 bg-neutral-100 rounded w-full"></div>
+        <div class="h-12 bg-neutral-100 rounded w-full"></div>
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="space-y-12 pb-20">
+      
+      <div class="space-y-6">
+        <h2 class="text-lg font-serif border-b border-neutral-100 pb-2 text-neutral-800">Basic Information</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Product Name</label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              class="w-full px-4 py-3 border rounded-sm text-sm focus:outline-none transition-colors"
+              [ngClass]="(editForm.get('name')?.touched && editForm.get('name')?.invalid) ? 'border-red-300 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+            />
+          </div>
+
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Description</label>
+            <textarea 
+              formControlName="description" 
+              rows="4" 
+              class="w-full px-4 py-3 border border-neutral-200 rounded-sm text-sm focus:outline-none focus:border-black transition-colors resize-y"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <h2 class="text-lg font-serif border-b border-neutral-100 pb-2 text-neutral-800">Pricing & Inventory</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Price (E£)</label>
+            <input 
+              type="number" 
+              formControlName="price" 
+              class="w-full px-4 py-3 border rounded-sm text-sm focus:outline-none transition-colors"
+              [ngClass]="(editForm.get('price')?.touched && editForm.get('price')?.invalid) ? 'border-red-300 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+            />
+          </div>
+
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Current Stock</label>
+            <input 
+              type="number" 
+              formControlName="initialInventory" 
+              class="w-full px-4 py-3 border rounded-sm text-sm focus:outline-none transition-colors"
+              [ngClass]="(editForm.get('initialInventory')?.touched && editForm.get('initialInventory')?.invalid) ? 'border-red-300 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+            />
+          </div>
+
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">SKU</label>
+            <input 
+              type="text" 
+              formControlName="sku" 
+              class="w-full px-4 py-3 border rounded-sm text-sm focus:outline-none transition-colors uppercase font-mono"
+              [ngClass]="(editForm.get('sku')?.touched && editForm.get('sku')?.invalid) ? 'border-red-300 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <h2 class="text-lg font-serif border-b border-neutral-100 pb-2 text-neutral-800">Organization</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Category Type</label>
+            <select 
+              formControlName="productType" 
+              class="w-full px-4 py-3 border border-neutral-200 bg-white rounded-sm text-sm focus:outline-none focus:border-black transition-colors"
+            >
+              <option value="">Select Category</option>
+              <option value="Apparel">Apparel</option>
+              <option value="Outerwear">Outerwear</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Bags">Bags</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-sans uppercase tracking-wider text-neutral-500 block mb-2">Collection Tag</label>
+            <select 
+              formControlName="categoryTag" 
+              class="w-full px-4 py-3 border border-neutral-200 bg-white rounded-sm text-sm focus:outline-none focus:border-black transition-colors"
+            >
+              <option value="none">None</option>
+              <option value="new arrivals">New Arrivals</option>
+              <option value="best sellers">Best Sellers</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-neutral-100 flex items-center justify-end space-x-4">
+        <button 
+          type="button" 
+          routerLink="/admin/inventory"
+          class="px-6 py-3.5 text-xs font-sans uppercase tracking-widest font-medium text-neutral-600 hover:text-black transition-colors"
+        >
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          [disabled]="editForm.invalid || isSubmitting()"
+          class="bg-black text-white px-8 py-3.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors rounded-sm flex items-center shadow-sm"
+        >
+          @if (isSubmitting()) {
+            <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Saving Changes...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+</div>

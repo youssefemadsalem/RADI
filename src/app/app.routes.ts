@@ -73,10 +73,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/admin/add-product/add-product').then((m) => m.AddProduct),
       },
+  
+      // i added this route to pass the product id in the url so the edit component knows what to fetch
       {
-        path: 'customers',
+        path: 'inventory/edit-product/:id',
         loadComponent: () =>
-          import('./components/admin/customers/customers').then((m) => m.Customers),
+          import('./components/admin/edit-product/edit-product').then((m) => m.EditProduct),
       },
     ],
   },

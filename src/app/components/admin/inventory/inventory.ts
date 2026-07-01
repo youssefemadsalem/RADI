@@ -5,14 +5,13 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-inventory',
-  imports: [CommonModule,RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './inventory.html',
   styleUrl: './inventory.css',
 })
 export class Inventory implements OnInit {
   private inventoryService = inject(InventoryService);
 
-  // Core visual data stream state nodes
   metrics = signal<InventoryMetrics | null>(null);
   products = signal<InventoryProduct[]>([]);
   isLoading = signal<boolean>(true);
@@ -36,18 +35,29 @@ export class Inventory implements OnInit {
     });
   }
 
-  /**
-   * 🌟 FIXED CODE: Dynamically processes incoming asset string identifiers.
-   * If it contains inline base64 seed strings, returns it directly.
-   * Otherwise, treats it as a static asset file path from multer storage uploads.
-   */
   resolveProductImage(imageStr: string): string {
     if (!imageStr) return '';
-    
-    if (imageStr.startsWith('data:image/')) {
-      return imageStr;
-    }
-    
+    if (imageStr.startsWith('data:image/')) return imageStr;
     return `http://localhost:5000/${imageStr}`;
+  }
+
+  // i added this function to handle when the admin clicks delete. 
+  // it asks for confirmation first so they dont accidentally delete things.
+  onDeleteProduct(productId: string): void {
+    if (confirm('are you sure you want to permanently delete this product?')) {
+      this.inventoryService.deleteProduct(productId).subscribe({
+        next: () => {
+          // i filter out the deleted product from the signal so it disappears from the table immediately
+          const updatedList = this.products().filter(p => p.id !== productId);
+          this.products.set(updatedList);
+          // you might also want to call this.loadInventoryData() here to refresh the metrics at the top
+          this.loadInventoryData();
+        },
+        error: (err) => {
+          console.error('failed to delete product', err);
+          alert('there was an error deleting the product.');
+        }
+      });
+    }
   }
 }

@@ -41,4 +41,17 @@ export class InventoryService {
   createNewProduct(formData: FormData): Observable<{ success: boolean; productId: string }> {
     return this.http.post<{ success: boolean; productId: string }>(`${this.apiUrl}/create-new`, formData);
   }
+
+
+// i added this to send the delete request to the server
+  deleteProduct(id: string) {
+    return this.http.delete(`http://localhost:5000/api/products/delete/${id}`);
+  }
+
+  // i added this to send the updated form data back to the server
+  updateProduct(id: string, data: any) {
+    return this.http.put(`http://localhost:5000/api/products/edit/${id}`, data);
+  }
+
+
 }
