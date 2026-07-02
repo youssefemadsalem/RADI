@@ -19,6 +19,7 @@ export class Navbar {
 
   readonly shoppingBag = LucideShoppingBag;
   logoutToastMessage = signal<string | null>(null);
+  public isMobileMenuOpen = signal<boolean>(false);
 
   public totalItemsCount = computed(() => this.cart.cartCount());
 

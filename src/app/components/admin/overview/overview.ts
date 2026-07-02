@@ -29,6 +29,7 @@ export class Overview implements OnInit {
   // Modern UI Signals
   metrics = signal<any[]>([]);
   recentOrders = signal<any[]>([]);
+    isLoading = signal<boolean>(true);
 
   ngOnInit(): void {
     this.loadDashboardAnalytics();

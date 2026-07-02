@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/service/auth';
@@ -22,7 +22,7 @@ import {
 })
 export class Admin {
   public authService = inject(AuthService);
-
+public isAdminSidebarOpen = signal<boolean>(false);
   // Structural Navigation Icon Sets
   readonly dashboardIcon = LucideLayoutDashboard;
   readonly ordersIcon = LucideShoppingBag;
