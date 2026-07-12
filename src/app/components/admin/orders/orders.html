@@ -52,7 +52,7 @@
                   <td class="py-5 text-center align-top pt-5">
                     <span class="inline-block px-2 py-1 text-[9px] font-mono uppercase tracking-wider bg-neutral-100 text-neutral-600 rounded-sm">{{ order.paymentMethod }}</span>
                     @if (order.paymentMethod === 'INSTAPAY' && order.screenshotUrl) {
-                      <a [href]="'http://localhost:5000/' + order.screenshotUrl" target="_blank" class="block text-[9px] text-blue-500 hover:text-blue-700 underline mt-1.5 font-sans uppercase tracking-wider">View Receipt</a>
+                      <a [href]="'https://radi-backend.vercel.app/' + order.screenshotUrl" target="_blank" class="block text-[9px] text-blue-500 hover:text-blue-700 underline mt-1.5 font-sans uppercase tracking-wider">View Receipt</a>
                     }
                   </td>
                   <td class="py-5 text-right align-top pt-5">
@@ -108,7 +108,7 @@
                   <div class="mt-1">
                     <span class="inline-block px-2 py-0.5 text-[9px] font-mono uppercase bg-neutral-100 text-neutral-600 rounded-sm">{{ order.paymentMethod }}</span>
                     @if (order.paymentMethod === 'INSTAPAY' && order.screenshotUrl) {
-                      <a [href]="'http://localhost:5000/' + order.screenshotUrl" target="_blank" class="text-[10px] text-blue-500 underline ml-2 font-sans tracking-wide">Receipt</a>
+                      <a [href]="'https://radi-backend.vercel.app/' + order.screenshotUrl" target="_blank" class="text-[10px] text-blue-500 underline ml-2 font-sans tracking-wide">Receipt</a>
                     }
                   </div>
                 </div>

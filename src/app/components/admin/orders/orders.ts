@@ -22,7 +22,7 @@ export class Orders implements OnInit {
 
   loadOrders(): void {
     this.isLoading.set(true);
-    this.http.get<any>('http://localhost:5000/api/orders').subscribe({
+    this.http.get<any>('https://radi-backend.vercel.app/api/orders').subscribe({
       next: (response) => {
         this.orders.set(response.data);
         this.isLoading.set(false);
@@ -39,7 +39,7 @@ export class Orders implements OnInit {
     const selectElement = event.target as HTMLSelectElement;
     const newStatus = selectElement.value;
 
-    this.http.put(`http://localhost:5000/api/orders/${orderId}/status`, { status: newStatus }).subscribe({
+    this.http.put(`https://radi-backend.vercel.app/api/orders/${orderId}/status`, { status: newStatus }).subscribe({
       next: () => {
         // updates the local signal array so the ui reflects the change without needing a full page reload
         const currentOrders = this.orders();

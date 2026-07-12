@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
 private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5000/api/products';
+  private apiUrl = 'https://radi-backend.vercel.app/api/products';
 
   getProducts(filterType?: string): Observable<any[]> {
     const url = filterType ? `${this.apiUrl}?filterType=${filterType}` : this.apiUrl;

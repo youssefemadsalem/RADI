@@ -11,7 +11,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router); 
-  private apiUrl = 'http://localhost:5000/api/auth';
+  private apiUrl = 'https://radi-backend.vercel.app/api/auth';
 
   currentUser = signal<{ email: string; role: string } | null>(null);
   isAuthenticated = signal<boolean>(false);

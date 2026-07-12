@@ -19,7 +19,7 @@ export interface DashboardPayload {
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:5000/api/admin/overview';
+  private readonly apiUrl = 'https://radi-backend.vercel.app/api/admin/overview';
 
   getOverviewMetrics(): Observable<DashboardPayload> {
     return this.http.get<DashboardPayload>(this.apiUrl);

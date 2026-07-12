@@ -38,7 +38,7 @@ export class Inventory implements OnInit {
   resolveProductImage(imageStr: string): string {
     if (!imageStr) return '';
     if (imageStr.startsWith('data:image/')) return imageStr;
-    return `http://localhost:5000/${imageStr}`;
+    return `https://radi-backend.vercel.app/${imageStr}`;
   }
 
   // i added this function to handle when the admin clicks delete. 

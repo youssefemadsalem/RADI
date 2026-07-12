@@ -13,7 +13,7 @@ export class Checkout {
 
 
 private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5000/api/orders/create';
+  private apiUrl = 'https://radi-backend.vercel.app/api/orders/create';
 
   /**
    * Compiles textual data and files into a multipart/form-data payload

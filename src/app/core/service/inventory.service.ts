@@ -30,7 +30,7 @@ export interface InventoryResponse {
 })
 export class InventoryService {
   private http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:5000/api/products';
+  private readonly apiUrl = 'https://radi-backend.vercel.app/api/products';
 
   // Fetch metrics and product list for your main panel grid (View 1)
   getInventoryDashboard(): Observable<InventoryResponse> {
@@ -45,12 +45,12 @@ export class InventoryService {
 
 // i added this to send the delete request to the server
   deleteProduct(id: string) {
-    return this.http.delete(`http://localhost:5000/api/products/delete/${id}`);
+    return this.http.delete(`https://radi-backend.vercel.app/api/products/delete/${id}`);
   }
 
   // i added this to send the updated form data back to the server
   updateProduct(id: string, data: any) {
-    return this.http.put(`http://localhost:5000/api/products/edit/${id}`, data);
+    return this.http.put(`https://radi-backend.vercel.app/api/products/edit/${id}`, data);
   }
 
 

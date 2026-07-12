@@ -78,7 +78,7 @@ export class ProductDetails implements OnInit {
     }
     
     cleanPath = cleanPath.replace(/\\/g, "/");
-    return `http://localhost:5000/${cleanPath}`;
+    return `https://radi-backend.vercel.app/${cleanPath}`;
   }
 
   // Carousel Transformation Handlers

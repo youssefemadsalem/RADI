@@ -218,7 +218,7 @@
               <div class="w-16 h-20 bg-white border border-neutral-200 rounded overflow-hidden relative shrink-0">
                 @if (item.image) { 
                   <img 
-                    [src]="item.image.startsWith('http') ? item.image : 'http://localhost:5000/' + item.image" 
+                    [src]="item.image.startsWith('http') ? item.image : 'https://radi-backend.vercel.app/' + item.image" 
                     [alt]="item.name" 
                     class="w-full h-full object-cover" 
                   /> 
