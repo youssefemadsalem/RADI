@@ -46,20 +46,30 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
             <div>
               <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Category</label>
-              <select [(ngModel)]="productType" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
+              <select [(ngModel)]="productType" 
+                      [ngClass]="{'border-red-500 border-b-2': formErrors().productType}"
+                      class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
                 <option value="Apparel">Apparel</option>
                 <option value="Carry">Carry</option>
                 <option value="Tableware">Tableware</option>
                 <option value="Outerwear">Outerwear</option>
               </select>
+              @if (formErrors().productType) {
+                <p class="text-red-500 text-[10px] mt-1">{{ formErrors().productType }}</p>
+              }
             </div>
             <div>
               <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-2">Collection Tag</label>
-              <select [(ngModel)]="categoryTag" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
+              <select [(ngModel)]="categoryTag" 
+                      [ngClass]="{'border-red-500 border-b-2': formErrors().categoryTag}"
+                      class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black">
                 <option value="none">FW24 ARCHIVE</option>
                 <option value="new arrivals">New Arrivals</option>
                 <option value="best sellers">Best Sellers</option>
               </select>
+              @if (formErrors().categoryTag) {
+                <p class="text-red-500 text-[10px] mt-1">{{ formErrors().categoryTag }}</p>
+              }
             </div>
           </div>
 
@@ -69,7 +79,11 @@
               [(ngModel)]="description" 
               rows="4" 
               placeholder="Describe the silhouette, fabric narrative, and craftsmanship details..." 
+              [ngClass]="{'border-red-500 border-2': formErrors().description}"
               class="w-full border border-neutral-100 p-4 text-sm font-sans text-neutral-600 bg-neutral-50/30 focus:outline-none focus:border-neutral-300 transition-colors resize-none"></textarea>
+            @if (formErrors().description) {
+              <p class="text-red-500 text-[10px] mt-1">{{ formErrors().description }}</p>
+            }
           </div>
         </div>
       </div>
@@ -79,6 +93,7 @@
         
         <div 
           (click)="fileInput.click()"
+          [ngClass]="{'border-red-500': formErrors().images}"
           class="border border-dashed border-neutral-200 bg-neutral-50/50 p-12 text-center rounded-sm cursor-pointer hover:bg-neutral-50 transition-colors group mb-6">
           <input 
             #fileInput 
@@ -93,20 +108,29 @@
           <span class="block text-[10px] font-sans uppercase tracking-widest text-neutral-500 mb-1">Drag and drop high-resolution imagery</span>
           <span class="block text-[9px] font-sans text-neutral-400">TIFF, JPG OR PNG &bull; MIN 3000PX WIDTH</span>
         </div>
+        
+        @if (formErrors().images) {
+          <p class="text-red-500 text-[10px] mb-4 -mt-4">{{ formErrors().images }}</p>
+        }
 
         <div class="grid grid-cols-5 gap-4">
           @for (slot of [0, 1, 2, 3, 4]; track slot) {
-            <div class="aspect-[3/4] bg-neutral-50 border border-neutral-100 flex items-center justify-center relative group overflow-hidden rounded-sm">
-              @if (previewImageUrls()[slot]) {
-                <img [src]="previewImageUrls()[slot]" class="w-full h-full object-cover" />
-                <button 
-                  (click)="removeImageSlot(slot); $event.stopPropagation()" 
-                  class="absolute top-1 right-1 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-[8px]">
-                  &times;
-                </button>
-              } @else {
-                <span class="text-neutral-300 font-light text-xl pointer-events-none">+</span>
-              }
+            <div>
+              <span class="block text-center text-[9px] font-sans uppercase tracking-widest text-neutral-400 mb-2">
+                {{ imageSlotLabels()[slot] }}
+              </span>
+              <div class="aspect-[3/4] bg-neutral-50 border border-neutral-100 flex items-center justify-center relative group overflow-hidden rounded-sm">
+                @if (previewImageUrls()[slot]) {
+                  <img [src]="previewImageUrls()[slot]" class="w-full h-full object-cover" />
+                  <button 
+                    (click)="removeImageSlot(slot); $event.stopPropagation()" 
+                    class="absolute top-1 right-1 bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-[8px]">
+                    &times;
+                  </button>
+                } @else {
+                  <span class="text-neutral-300 font-light text-xl pointer-events-none">+</span>
+                }
+              </div>
             </div>
           }
         </div>
@@ -156,18 +180,33 @@
         
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Height</label>
-          <input [(ngModel)]="height" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 24 cm" />
+          <input [(ngModel)]="height" type="text" 
+                 [ngClass]="{'border-red-500 border-b-2': formErrors().height}"
+                 class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 24 cm" />
+          @if (formErrors().height) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().height }}</p>
+          }
         </div>
 
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Width</label>
-          <input [(ngModel)]="width" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 32 cm" />
+          <input [(ngModel)]="width" type="text" 
+                 [ngClass]="{'border-red-500 border-b-2': formErrors().width}"
+                 class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. 32 cm" />
+          @if (formErrors().width) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().width }}</p>
+          }
         </div>
 
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Composition / Material</label>
-          <input [(ngModel)]="materials" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. Cotton, Leather" />
+          <input [(ngModel)]="materials" type="text" 
+                 [ngClass]="{'border-red-500 border-b-2': formErrors().materials}"
+                 class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="e.g. Cotton, Leather" />
           <span class="text-[9px] text-neutral-400 mt-1 block">separate multiple materials with a comma</span>
+          @if (formErrors().materials) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().materials }}</p>
+          }
         </div>
       </div>
 
