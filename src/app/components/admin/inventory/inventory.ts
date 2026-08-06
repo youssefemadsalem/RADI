@@ -15,6 +15,9 @@ export class Inventory implements OnInit {
   metrics = signal<InventoryMetrics | null>(null);
   products = signal<InventoryProduct[]>([]);
   isLoading = signal<boolean>(true);
+  
+  productToDelete = signal<string | null>(null);
+  isDeleting = signal<boolean>(false);
 
   ngOnInit(): void {
     this.loadInventoryData();
@@ -41,23 +44,35 @@ export class Inventory implements OnInit {
     return `https://radi-backend.vercel.app/${imageStr}`;
   }
 
-  // i added this function to handle when the admin clicks delete. 
-  // it asks for confirmation first so they dont accidentally delete things.
-  onDeleteProduct(productId: string): void {
-    if (confirm('are you sure you want to permanently delete this product?')) {
-      this.inventoryService.deleteProduct(productId).subscribe({
-        next: () => {
-          // i filter out the deleted product from the signal so it disappears from the table immediately
-          const updatedList = this.products().filter(p => p.id !== productId);
-          this.products.set(updatedList);
-          // you might also want to call this.loadInventoryData() here to refresh the metrics at the top
-          this.loadInventoryData();
-        },
-        error: (err) => {
-          console.error('failed to delete product', err);
-          alert('there was an error deleting the product.');
-        }
-      });
-    }
+  // Modern modal delete logic
+  openDeleteModal(productId: string): void {
+    this.productToDelete.set(productId);
+  }
+
+  closeDeleteModal(): void {
+    if (this.isDeleting()) return;
+    this.productToDelete.set(null);
+  }
+
+  confirmDelete(): void {
+    const productId = this.productToDelete();
+    if (!productId) return;
+
+    this.isDeleting.set(true);
+    this.inventoryService.deleteProduct(productId).subscribe({
+      next: () => {
+        const updatedList = this.products().filter(p => p.id !== productId);
+        this.products.set(updatedList);
+        this.loadInventoryData();
+        this.isDeleting.set(false);
+        this.closeDeleteModal();
+      },
+      error: (err) => {
+        console.error('failed to delete product', err);
+        alert('there was an error deleting the product.');
+        this.isDeleting.set(false);
+        this.closeDeleteModal();
+      }
+    });
   }
 }

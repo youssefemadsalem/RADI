@@ -1,0 +1,23 @@
+<div class="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white pt-24 pb-32">
+  <div class="max-w-4xl mx-auto px-6 sm:px-8">
+    <div class="mb-16 md:mb-24 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out fill-mode-both">
+      <h1 class="text-3xl md:text-5xl font-serif font-semibold tracking-tight text-neutral-900 mb-4">{{ pageContent.title }}</h1>
+      <p class="text-xs md:text-sm uppercase tracking-[0.2em] text-neutral-500 font-medium">{{ pageContent.subtitle }}</p>
+    </div>
+
+    <div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out fill-mode-both" style="animation-delay: 150ms;">
+      @for (paragraph of pageContent.content; track paragraph) {
+        <p class="text-sm md:text-base text-neutral-600 leading-relaxed font-light max-w-2xl">
+          {{ paragraph }}
+        </p>
+      }
+    </div>
+
+    <div class="mt-24 pt-12 border-t border-neutral-100 animate-in fade-in duration-700 ease-out fill-mode-both" style="animation-delay: 300ms;">
+      <a routerLink="/" class="text-xs uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors duration-300 flex items-center gap-2 w-fit group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" class="group-hover:-translate-x-1 transition-transform duration-300"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Return to Shop
+      </a>
+    </div>
+  </div>
+</div>

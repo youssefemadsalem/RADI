@@ -44,6 +44,34 @@ export const routes: Routes = [
         path: '404',
         loadComponent: () => import('./components/not-found/not-found').then((m) => m.NotFound),
       },
+      {
+        path: 'about',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'collections',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'privacy-policy',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'terms-and-conditions',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'faq',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'returns-exchanges',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
+      {
+        path: 'customer-care',
+        loadComponent: () => import('./components/info-page/info-page').then((m) => m.InfoPage),
+      },
     ],
   },
 
