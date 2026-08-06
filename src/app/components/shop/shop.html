@@ -4,7 +4,7 @@
     
     <div class="absolute inset-0 w-full h-full pointer-events-none">
       <img 
-        src="./7.png" 
+        src="./7.jpeg" 
         alt="RADI Campaign" 
         class="w-full h-full object-cover object-center opacity-80" 
       />
@@ -103,14 +103,14 @@
 
                   @if (product.images && product.images.length > 0) {
                     <img
-                      [src]="product.images[0].startsWith('http') ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]"
+                      [src]="(product.images[0].startsWith('http') || product.images[0].startsWith('data:')) ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]"
                       [alt]="product.name"
                       class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/card:scale-105 z-0"
                     />
                     
                     @if (product.images.length > 1) {
                       <img
-                        [src]="product.images[1].startsWith('http') ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]"
+                        [src]="(product.images[1].startsWith('http') || product.images[1].startsWith('data:')) ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]"
                         [alt]="product.name + ' alternate view'"
                         class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover/card:opacity-100 z-0"
                       />
@@ -183,9 +183,9 @@
                   }
 
                   @if (product.images && product.images.length > 0) {
-                    <img [src]="product.images[0].startsWith('http') ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]" [alt]="product.name" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/card:scale-105 z-0" />
+                    <img [src]="(product.images[0].startsWith('http') || product.images[0].startsWith('data:')) ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]" [alt]="product.name" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/card:scale-105 z-0" />
                     @if (product.images.length > 1) {
-                      <img [src]="product.images[1].startsWith('http') ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]" [alt]="product.name + ' alternate view'" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover/card:opacity-100 z-0" />
+                      <img [src]="(product.images[1].startsWith('http') || product.images[1].startsWith('data:')) ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]" [alt]="product.name + ' alternate view'" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover/card:opacity-100 z-0" />
                     }
                   } @else {
                     <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400 absolute inset-0">[ Visual Img Placeholder ]</div>
@@ -244,9 +244,9 @@
                   }
 
                   @if (product.images && product.images.length > 0) {
-                    <img [src]="product.images[0].startsWith('http') ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]" [alt]="product.name" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/card:scale-105 z-0" />
+                    <img [src]="(product.images[0].startsWith('http') || product.images[0].startsWith('data:')) ? product.images[0] : 'https://radi-backend.vercel.app/' + product.images[0]" [alt]="product.name" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/card:scale-105 z-0" />
                     @if (product.images.length > 1) {
-                      <img [src]="product.images[1].startsWith('http') ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]" [alt]="product.name + ' alternate view'" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover/card:opacity-100 z-0" />
+                      <img [src]="(product.images[1].startsWith('http') || product.images[1].startsWith('data:')) ? product.images[1] : 'https://radi-backend.vercel.app/' + product.images[1]" [alt]="product.name + ' alternate view'" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover/card:opacity-100 z-0" />
                     }
                   } @else {
                     <div class="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-widest text-neutral-400 absolute inset-0">[ Visual Img Placeholder ]</div>
