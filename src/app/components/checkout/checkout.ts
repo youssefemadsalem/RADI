@@ -109,14 +109,64 @@ export class Checkout implements OnInit {
     event.preventDefault();
   }
 
-  private processFile(file: File): void {
+  private async processFile(file: File): Promise<void> {
     if (!file.type.startsWith('image/')) return;
-    this.screenshotFile = file;
-    this.checkoutForm.get('screenshotRequired')?.setValue(file.name);
+    
+    try {
+      const compressedFile = await this.compressImage(file);
+      this.screenshotFile = compressedFile;
+      this.checkoutForm.get('screenshotRequired')?.setValue(compressedFile.name);
 
-    const reader = new FileReader();
-    reader.onload = () => this.screenshotPreview.set(reader.result as string);
-    reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = () => this.screenshotPreview.set(reader.result as string);
+      reader.readAsDataURL(compressedFile);
+    } catch (e) {
+      console.error('Compression failed', e);
+      this.screenshotFile = file;
+      this.checkoutForm.get('screenshotRequired')?.setValue(file.name);
+      const reader = new FileReader();
+      reader.onload = () => this.screenshotPreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  compressImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1200;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round(height * (maxDim / width));
+              width = maxDim;
+            } else {
+              width = Math.round(width * (maxDim / height));
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
+            } else {
+              resolve(file);
+            }
+          }, 'image/jpeg', 0.8);
+        };
+        img.onerror = error => reject(error);
+      };
+      reader.onerror = error => reject(error);
+    });
   }
 
   submitOrder(): void {
