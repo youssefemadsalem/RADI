@@ -43,21 +43,28 @@ export class Shop implements OnInit {
   loadCategorizedCatalog(): void {
     this.isLoading.set(true); // Activate loading UI block
 
-    // Using a counter or tracking the main streams to cleanly unset loading
+    let completed = 0;
+    const checkDone = () => {
+      completed++;
+      if (completed === 3) this.isLoading.set(false);
+    };
+
     this.productService.getProducts('new arrivals').subscribe({
       next: (data) => { this.newArrivals.set(data); this.triggerSwiperUpdate(); },
-      error: (err) => console.error('Failed fetching new arrivals:', err),
-      complete: () => this.isLoading.set(false) // Toggle off when primary content renders
+      error: (err) => { console.error('Failed fetching new arrivals:', err); checkDone(); },
+      complete: checkDone
     });
 
     this.productService.getProducts('best sellers').subscribe({
       next: (data) => { this.bestSellers.set(data); this.triggerSwiperUpdate(); },
-      error: (err) => console.error('Failed fetching best sellers:', err),
+      error: (err) => { console.error('Failed fetching best sellers:', err); checkDone(); },
+      complete: checkDone
     });
 
     this.productService.getProducts('clothes').subscribe({
       next: (data) => { this.clothesCollection.set(data); this.triggerSwiperUpdate(); },
-      error: (err) => console.error('Failed fetching clothes archive:', err),
+      error: (err) => { console.error('Failed fetching clothes archive:', err); checkDone(); },
+      complete: checkDone
     });
   }
 
