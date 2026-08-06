@@ -32,6 +32,10 @@ export class AddProduct {
   uploadedFiles = signal<File[]>([]);
   previewImageUrls = signal<string[]>([]);
 
+  isSubmitting = signal<boolean>(false);
+  showSuccessToast = signal<boolean>(false);
+  formErrors = signal<any>({});
+
   onFilesSelected(event: any): void {
     const files: FileList = event.target.files;
     if (!files) return;
@@ -62,10 +66,20 @@ export class AddProduct {
   }
 
   onSubmitProduct(): void {
-    if (!this.name() || !this.sku() || !this.price() || !this.initialInventory()) {
-      alert('Validation constraint mapping incomplete. Please populate required fields.');
+    const errors: any = {};
+    if (!this.name()) errors.name = 'Product name is required.';
+    if (!this.price()) errors.price = 'Retail price is required.';
+    if (this.initialInventory() === null || this.initialInventory() === undefined) errors.inventory = 'Initial inventory is required.';
+    if (!this.sku()) errors.sku = 'SKU is required.';
+
+    this.formErrors.set(errors);
+
+    if (Object.keys(errors).length > 0) {
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+
+    this.isSubmitting.set(true);
 
     const formData = new FormData();
     formData.append('name', this.name());
@@ -89,11 +103,20 @@ export class AddProduct {
     this.inventoryService.createNewProduct(formData).subscribe({
       next: (res) => {
         if (res.success) {
-          this.router.navigate(['/admin/inventory']);
+          this.isSubmitting.set(false);
+          this.showSuccessToast.set(true);
+          setTimeout(() => {
+            this.router.navigate(['/admin/inventory']);
+          }, 1500);
+        } else {
+          this.isSubmitting.set(false);
+          alert('Submission failed. Please check details.');
         }
       },
       error: (err) => {
         console.error('Multipart asset record pipeline ingestion mapping failed:', err);
+        this.isSubmitting.set(false);
+        alert('Server error occurred during upload.');
       }
     });
   }

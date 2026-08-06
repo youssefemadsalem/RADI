@@ -7,8 +7,18 @@
     <div class="flex gap-4">
       <button 
         (click)="onSubmitProduct()"
-        class="bg-black text-white px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-800 transition-colors">
-        Publish Product
+        [disabled]="isSubmitting()"
+        [ngClass]="{'opacity-50 cursor-not-allowed': isSubmitting()}"
+        class="bg-black text-white px-6 py-2.5 text-xs font-sans uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center min-w-[160px]">
+        @if (isSubmitting()) {
+          <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Uploading...
+        } @else {
+          Publish Product
+        }
       </button>
     </div>
   </div>
@@ -26,7 +36,11 @@
               [(ngModel)]="name" 
               type="text" 
               placeholder="e.g. MONOLITH OVERCOAT" 
+              [ngClass]="{'border-red-500 border-b-2': formErrors().name}"
               class="w-full border-b border-neutral-200 py-2 text-lg font-serif tracking-wide focus:outline-none focus:border-black transition-colors" />
+            @if (formErrors().name) {
+              <p class="text-red-500 text-[10px] mt-1">{{ formErrors().name }}</p>
+            }
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
@@ -106,20 +120,34 @@
         
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Retail Price (E£) *</label>
-          <div class="flex items-baseline border-b border-neutral-200 focus-within:border-black transition-colors">
-            <span class="text-neutral-400 font-sans mr-2">E£</span>
+          <div class="flex items-baseline border-b border-neutral-200 focus-within:border-black transition-colors"
+               [ngClass]="{'border-red-500 border-b-2 focus-within:border-red-500': formErrors().price}">
+            <span class="text-neutral-400 font-sans mr-2" [ngClass]="{'text-red-400': formErrors().price}">E£</span>
             <input [(ngModel)]="price" type="number" class="w-full py-2 bg-transparent focus:outline-none" placeholder="0.00" />
           </div>
+          @if (formErrors().price) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().price }}</p>
+          }
         </div>
 
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">Initial Inventory *</label>
-          <input [(ngModel)]="initialInventory" type="number" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="24" />
+          <input [(ngModel)]="initialInventory" type="number" 
+                 [ngClass]="{'border-red-500 border-b-2': formErrors().inventory}"
+                 class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors" placeholder="24" />
+          @if (formErrors().inventory) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().inventory }}</p>
+          }
         </div>
 
         <div>
           <label class="block text-[10px] font-sans uppercase tracking-wider text-neutral-400 mb-1">SKU / Reference Code *</label>
-          <input [(ngModel)]="sku" type="text" class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors placeholder:text-neutral-200" placeholder="RD-FW24-OUT-001" />
+          <input [(ngModel)]="sku" type="text" 
+                 [ngClass]="{'border-red-500 border-b-2': formErrors().sku}"
+                 class="w-full border-b border-neutral-200 py-2 bg-transparent focus:outline-none focus:border-black transition-colors placeholder:text-neutral-200" placeholder="RD-FW24-OUT-001" />
+          @if (formErrors().sku) {
+            <p class="text-red-500 text-[10px] mt-1">{{ formErrors().sku }}</p>
+          }
         </div>
       </div>
 
@@ -159,5 +187,15 @@
       </div>
 
     </div>
+    </div>
   </div>
+
+  @if (showSuccessToast()) {
+    <div class="fixed bottom-8 right-8 bg-black text-white px-6 py-4 rounded-sm shadow-xl flex items-center space-x-3 z-50 transform transition-all duration-300 translate-y-0 opacity-100">
+      <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <span class="text-sm font-sans tracking-wide">Product added successfully!</span>
+    </div>
+  }
 </div>
