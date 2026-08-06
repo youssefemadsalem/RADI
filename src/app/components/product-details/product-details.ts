@@ -41,7 +41,9 @@ export class ProductDetails implements OnInit {
       next: (data) => {
         this.product.set(data);
         this.currentImageIndex.set(0); // Safely reset carousel view pane to master index
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         this.isLoading.set(false);
       },
       error: (err) => {
