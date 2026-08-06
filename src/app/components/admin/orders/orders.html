@@ -52,7 +52,7 @@
                   <td class="py-5 text-center align-top pt-5">
                     <span class="inline-block px-2 py-1 text-[9px] font-mono uppercase tracking-wider bg-neutral-100 text-neutral-600 rounded-sm">{{ order.paymentMethod }}</span>
                     @if (order.paymentMethod === 'INSTAPAY' && order.screenshotUrl) {
-                      <a [href]="'https://radi-backend.vercel.app/' + order.screenshotUrl" target="_blank" class="block text-[9px] text-blue-500 hover:text-blue-700 underline mt-1.5 font-sans uppercase tracking-wider">View Receipt</a>
+                      <a href="#" (click)="openReceiptModal(order.screenshotUrl, $event)" class="block text-[9px] text-blue-500 hover:text-blue-700 underline mt-1.5 font-sans uppercase tracking-wider">View Receipt</a>
                     }
                   </td>
                   <td class="py-5 text-right align-top pt-5">
@@ -108,7 +108,7 @@
                   <div class="mt-1">
                     <span class="inline-block px-2 py-0.5 text-[9px] font-mono uppercase bg-neutral-100 text-neutral-600 rounded-sm">{{ order.paymentMethod }}</span>
                     @if (order.paymentMethod === 'INSTAPAY' && order.screenshotUrl) {
-                      <a [href]="'https://radi-backend.vercel.app/' + order.screenshotUrl" target="_blank" class="text-[10px] text-blue-500 underline ml-2 font-sans tracking-wide">Receipt</a>
+                      <a href="#" (click)="openReceiptModal(order.screenshotUrl, $event)" class="text-[10px] text-blue-500 underline ml-2 font-sans tracking-wide">Receipt</a>
                     }
                   </div>
                 </div>
@@ -133,6 +133,17 @@
         </div>
 
       }
+    </div>
+  }
+
+  @if (receiptModalUrl()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" (click)="closeReceiptModal()">
+      <div class="relative max-w-3xl w-full max-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-white rounded-md shadow-2xl p-4" (click)="$event.stopPropagation()">
+        <button (click)="closeReceiptModal()" class="absolute top-4 right-4 bg-neutral-100 hover:bg-neutral-200 rounded-full p-2 text-black transition-colors z-10 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <img [src]="receiptModalUrl()" class="max-w-full max-h-[80vh] object-contain rounded" alt="Transfer Receipt" />
+      </div>
     </div>
   }
 </div>

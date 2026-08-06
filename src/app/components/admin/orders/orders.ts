@@ -15,6 +15,20 @@ export class Orders implements OnInit {
   // tracking the state of our orders array
   public orders = signal<any[]>([]);
   public isLoading = signal<boolean>(true);
+  public receiptModalUrl = signal<string | null>(null);
+
+  openReceiptModal(url: string, event: Event): void {
+    event.preventDefault();
+    if (url.startsWith('data:')) {
+      this.receiptModalUrl.set(url);
+    } else {
+      this.receiptModalUrl.set('https://radi-backend.vercel.app/' + url);
+    }
+  }
+
+  closeReceiptModal(): void {
+    this.receiptModalUrl.set(null);
+  }
 
   ngOnInit(): void {
     this.loadOrders();

@@ -70,7 +70,7 @@
                 <span class="px-3 text-xs font-medium text-black min-w-6 text-center select-none">{{ item.quantity }}</span>
                 <button 
                   type="button" 
-                  [disabled]="isProcessing()"
+                  [disabled]="isProcessing() || (item.maxStock !== undefined && item.quantity >= item.maxStock)"
                   (click)="cartService.updateQuantity(item._id, 1, item.selectedSize, item.selectedColor)" 
                   class="px-2.5 h-full hover:bg-neutral-50 transition-colors flex items-center justify-center border-l border-neutral-200 disabled:cursor-not-allowed"
                 >

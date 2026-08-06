@@ -106,7 +106,8 @@ export class ProductDetails implements OnInit {
       image: this.resolveImageUrl(currentProduct.images?.[0] || ''), 
       quantity: 1, 
       selectedSize: 'OS',       // Uniform blueprint standard
-      selectedColor: 'Default'  // Uniform blueprint standard
+      selectedColor: 'Default', // Uniform blueprint standard
+      maxStock: currentProduct.currentInventory || 0
     };
 
     this.cartService.addItem(itemToAdd);

@@ -79,7 +79,8 @@ export class Shop implements OnInit {
       image: product.images?.[0] || '', 
       selectedSize: selectedSize,
       selectedColor: selectedColor,
-      quantity: 1
+      quantity: 1,
+      maxStock: product.currentInventory || 0
     };
 
     if (typeof this.cartService.addItem === 'function') {

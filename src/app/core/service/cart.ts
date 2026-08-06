@@ -9,6 +9,7 @@ export interface CartItem {
   quantity: number;
   selectedSize: string;
   selectedColor: string;
+  maxStock: number;
 }
 
 @Injectable({
@@ -55,11 +56,13 @@ export class Cart {
       );
 
       if (existingItemIndex > -1) {
-        return currentItems.map((item, idx) =>
-          idx === existingItemIndex
-            ? { ...item, quantity: item.quantity + newItem.quantity }
-            : item
-        );
+        return currentItems.map((item, idx) => {
+          if (idx === existingItemIndex) {
+            const newQty = Math.min(item.quantity + newItem.quantity, item.maxStock);
+            return { ...item, quantity: newQty };
+          }
+          return item;
+        });
       }
       return [...currentItems, newItem];
     });
@@ -75,6 +78,9 @@ export class Cart {
 
         if (matchesVariant) {
           const newQty = item.quantity + amount;
+          if (newQty > item.maxStock) {
+            return { ...item, quantity: item.maxStock };
+          }
           return newQty > 0 ? { ...item, quantity: newQty } : item;
         }
         return item;
