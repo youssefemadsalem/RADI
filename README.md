@@ -1,59 +1,106 @@
-# RADIFront
+# RADI Front-End Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+RADI is a modern, responsive, and animated e-commerce storefront and administration panel built with the latest web technologies. It provides a seamless shopping experience for customers and a comprehensive backoffice for administrators.
 
-## Development server
+## 🚀 Technology Stack
 
-To start a local development server, run:
+This project leverages a cutting-edge frontend stack to deliver high performance and rich user experiences:
+
+- **Framework**: [Angular 21](https://angular.dev/) with Server-Side Rendering (SSR) support.
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & PostCSS for utility-first, highly customizable designs.
+- **Animations**: [GSAP](https://gsap.com/) for complex, high-performance UI micro-animations and transitions.
+- **Components & UI**: 
+  - [Swiper](https://swiperjs.com/) for interactive touch-enabled carousels.
+  - [Lucide Icons](https://lucide.dev/) (`@lucide/angular`) for clean and consistent iconography.
+- **State & Reactivity**: [RxJS](https://rxjs.dev/) combined with Angular Services.
+- **Testing**: [Vitest](https://vitest.dev/) for blazing fast unit testing.
+
+## 📁 Project Structure & Features
+
+The application architecture is divided into three main operational scopes:
+
+### 1. Storefront (Customer Facing)
+The public-facing e-commerce platform where users can browse and purchase products.
+- **Shop & Catalog**: Browse products (`/shop`), view collections, and detailed product pages (`/product/:id`).
+- **Cart & Checkout**: Interactive cart drawer, seamless checkout process (`/checkout`), and order confirmation (`/order-complete`).
+- **Information Pages**: Comprehensive static pages including About, FAQ, Privacy Policy, Terms & Conditions, Returns & Exchanges, and Customer Care.
+
+### 2. Authentication
+Secure login and registration flows.
+- **Auth Module**: Dedicated authentication portal (`/auth`).
+- **Guards**: Client-side phase lock guards (`authGuard`) to secure protected routes.
+
+### 3. Admin Backoffice
+A secure, feature-rich dashboard for store managers. Protected by `adminGuard`.
+- **Dashboard Overview**: High-level store metrics and analytics (`/admin/overview`).
+- **Order Management**: Track and manage customer orders (`/admin/orders`).
+- **Inventory Management**: Comprehensive product management including adding (`/admin/inventory/add-product`) and editing (`/admin/inventory/edit-product/:id`) products.
+
+## 🛠️ Setup & Development
+
+This project uses `npm` as the package manager.
+
+### Prerequisites
+- Node.js (v20+ recommended)
+- npm (v11+ based on package-lock)
+
+### Installation
+
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <repository-url>
+   cd RADI-front
+   ```
+
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development Server
+
+Run the local development server:
 
 ```bash
-ng serve
+npm start
 ```
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Server-Side Rendering (SSR)
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To test the application with SSR enabled locally:
 
 ```bash
-ng generate component component-name
+npm run serve:ssr:RADI-front
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Building for Production
+
+To build the project for production environments:
 
 ```bash
-ng generate --help
+npm run build
 ```
+The build artifacts will be stored in the `dist/` directory.
 
-## Building
+### Running Tests
 
-To build the project run:
+Execute the unit tests via Vitest:
 
 ```bash
-ng build
+npm run test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔒 Security & Routing
 
-## Running unit tests
+The application implements strict route guarding:
+- **`authGuard`**: Ensures only authenticated users can access specific storefront features like checkout.
+- **`adminGuard`**: Completely isolates the `/admin` backoffice routes, restricting access to users with administrative privileges only.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## 📝 Code Scaffolding
+
+Angular CLI is used for code scaffolding. To generate a new component:
 
 ```bash
-ng test
+npx ng generate component components/component-name
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
