@@ -92,6 +92,7 @@
                 type="text" 
                 formControlName="city" 
                 placeholder="City" 
+                aria-label="City"
                 class="w-full px-4 py-3.5 border rounded-md text-sm focus:outline-none" 
                 [ngClass]="(checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
               />
@@ -103,6 +104,7 @@
             <div>
               <select 
                 formControlName="governorate" 
+                aria-label="Governorate"
                 class="w-full px-4 py-3.5 bg-white border rounded-md text-sm focus:outline-none"
                 [ngClass]="(checkoutForm.get('governorate')?.touched && checkoutForm.get('governorate')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
               >
@@ -117,6 +119,7 @@
                 type="text" 
                 formControlName="postalCode" 
                 placeholder="Postal code" 
+                aria-label="Postal code"
                 class="w-full px-4 py-3.5 border border-neutral-200 rounded-md text-sm focus:border-black focus:outline-none" 
               />
             </div>
@@ -127,6 +130,7 @@
               type="tel" 
               formControlName="phone" 
               placeholder="Mobile Phone (e.g., 01012345678)" 
+              aria-label="Mobile Phone"
               class="w-full px-4 py-3.5 border rounded-md text-sm focus:outline-none" 
               [ngClass]="(checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-black'"
             />
@@ -175,7 +179,11 @@
                   (dragover)="onDragOver($event)" 
                   (drop)="onFileDropped($event)" 
                   (click)="fileFileInput.click()" 
-                  class="border-2 border-dashed bg-white rounded-md p-6 text-center cursor-pointer group space-y-2 transition-colors"
+                  (keydown.enter)="fileFileInput.click()"
+                  tabindex="0"
+                  role="button"
+                  aria-label="Upload Instapay transfer screenshot"
+                  class="border-2 border-dashed bg-white rounded-md p-6 text-center cursor-pointer group space-y-2 transition-colors focus:outline-none focus:ring-2 focus:ring-black"
                   [ngClass]="(checkoutForm.get('screenshotRequired')?.touched && checkoutForm.get('screenshotRequired')?.invalid) ? 'border-red-500 bg-red-50/10' : 'border-neutral-300 hover:border-black'"
                 >
                   <input type="file" #fileFileInput (change)="onFileSelected($event)" accept="image/*" class="hidden" />
@@ -242,6 +250,7 @@
             [(ngModel)]="couponInput" 
             [ngModelOptions]="{standalone: true}"
             placeholder="Discount code or gift card" 
+            aria-label="Discount code or gift card"
             class="w-full px-4 py-3 border border-neutral-200 rounded-md text-sm focus:border-black focus:outline-none uppercase" 
           />
           <button 

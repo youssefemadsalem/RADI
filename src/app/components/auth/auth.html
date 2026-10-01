@@ -28,11 +28,12 @@
 
         @if (currentView() === 'LOGIN' || currentView() === 'REGISTER') {
           <div class="flex flex-col border-b border-black py-2.5">
-            <label class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
+            <label for="email" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
               >Email Coordinates</label
             >
             <input
               type="email"
+              id="email"
               name="email"
               [(ngModel)]="email"
               required
@@ -43,11 +44,12 @@
           </div>
 
           <div class="flex flex-col border-b border-black py-2.5">
-            <label class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
+            <label for="password" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
               >Security Key</label
             >
             <input
               type="password"
+              id="password"
               name="password"
               [(ngModel)]="password"
               required
@@ -64,11 +66,12 @@
             your identity matches our record index.
           </p>
           <div class="flex flex-col border-b border-black py-2.5">
-            <label class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
+            <label for="resetEmail" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
               >Target Email Vector</label
             >
             <input
               type="email"
+              id="resetEmail"
               name="email"
               [(ngModel)]="email"
               required
@@ -86,11 +89,12 @@
           </p>
 
           <div class="flex flex-col border-b border-black py-2.5">
-            <label class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
+            <label for="otpCode" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
               >6-Digit OTP Key</label
             >
             <input
               type="text"
+              id="otpCode"
               name="otpCode"
               [(ngModel)]="otpCode"
               required
@@ -102,11 +106,12 @@
           </div>
 
           <div class="flex flex-col border-b border-black py-2.5">
-            <label class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
+            <label for="newPassword" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1"
               >New Security Key</label
             >
             <input
               type="password"
+              id="newPassword"
               name="newPassword"
               [(ngModel)]="newPassword"
               required

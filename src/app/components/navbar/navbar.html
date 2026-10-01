@@ -30,6 +30,7 @@
       type="button"
       (click)="isMobileMenuOpen.set(!isMobileMenuOpen())"
       [disabled]="logoutToastMessage()"
+      aria-label="Toggle mobile menu"
       class="flex md:hidden flex-col justify-center items-center w-6 h-6 space-y-1.5 text-neutral-400 hover:text-white transition-colors focus:outline-none"
     >
       <span class="w-5 h-[1px] bg-current transition-transform duration-300" [class.translate-y-[7px].rotate-45]="isMobileMenuOpen()"></span>
@@ -59,6 +60,7 @@
         type="button"
         (click)="cart.openCart()"
         [disabled]="logoutToastMessage()"
+        aria-label="Open cart"
         class="relative flex items-center p-2 text-neutral-400 hover:text-white transition-colors duration-300 group/bag disabled:opacity-30 disabled:cursor-not-allowed"
       >
         <svg 
